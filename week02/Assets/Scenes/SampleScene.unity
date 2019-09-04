@@ -340,8 +340,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   position: {x: 0, y: 0}
-  velocity: {x: 10, y: 0}
-  acceleration: {x: 0, y: 0}
+  posVelocity: {x: 1, y: 0}
+  posAcceleration: {x: 0, y: 0}
+  rotation: 0
+  rotVelocity: 1
+  rotAcceleration: 0
+  rotationMode: 0
+  positionMode: 0
 --- !u!23 &1336207649
 MeshRenderer:
   m_ObjectHideFlags: 0
