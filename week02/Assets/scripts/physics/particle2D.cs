@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum rotationUpdate
 {
@@ -11,7 +12,7 @@ public enum rotationUpdate
 public enum positionUpdate
 {
     POSITION_EULER_EXPLICIT,
-    POSITION_KINEMATIC
+    POSITION_KINEMATIC,
 }
 
 public class particle2D : MonoBehaviour
@@ -25,6 +26,16 @@ public class particle2D : MonoBehaviour
     [SerializeField]
     positionUpdate positionMode;
 
+    float rotMagnitudeModifier;
+    float posMagnitudeModifier;
+
+    [SerializeField]
+    bool circulerMode;
+
+    float currentTime = 0;
+
+    public Slider positionSlider;
+    public Slider rotationSlider;
     //step 2
     void updatePositionEulerExplicit(float dt)
     {
@@ -32,7 +43,7 @@ public class particle2D : MonoBehaviour
         //Euler's Method
         //F(t+dt) = F(t) + f(t)dt
         //               + (dF/dt)dt
-        position += posVelocity * dt;
+        position += posVelocity * dt * posMagnitudeModifier;
 
         //**** more to do here ****
         //v(t*dt) = v(t) + a(t)dt
@@ -41,35 +52,43 @@ public class particle2D : MonoBehaviour
     void updatePositionKinematic(float dt)
     {
         //x(t+dt) = x(t) + v(t)dt + (1/2) * a(t) * dt^2
-        position += posVelocity * dt + (1 / 2) * posAcceleration * (dt * dt);
+        position += posVelocity * dt * posMagnitudeModifier + (1 / 2) * posAcceleration * (dt * dt);
         posVelocity += posAcceleration * dt;
     }
 
     void updateRotationEulerExplicit(float dt)
     {
   
-        rotation += rotVelocity * dt;
-
+        rotation += rotVelocity * dt * rotMagnitudeModifier;
 
         rotVelocity += rotAcceleration * dt;
     }
 
     void updateRotationKinematic(float dt)
     {
-        rotation += rotVelocity * dt + (1 / 2) * rotAcceleration * (dt * dt);
-        rotVelocity += rotAcceleration * dt;
+        rotation += rotVelocity * dt * rotMagnitudeModifier + (1 / 2) * rotAcceleration * (dt * dt);
+        rotVelocity += (rotAcceleration * dt);
     }
+
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        if(circulerMode)
+        {
+            posVelocity = new Vector2(1, 0);
+        }
+        posMagnitudeModifier = positionSlider.value;
+        rotMagnitudeModifier = rotationSlider.value;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         float dt = Time.fixedDeltaTime;
+        posMagnitudeModifier = positionSlider.value;
+        rotMagnitudeModifier = rotationSlider.value;
+
         /*
         updatePositionEulerExplicit(Time.fixedDeltaTime);
         transform.position = position;
@@ -102,7 +121,31 @@ public class particle2D : MonoBehaviour
         }
         transform.position = position;
 
-        posAcceleration.x = -Mathf.Sin(Time.fixedTime);
-        rotAcceleration = -Mathf.Sin(Time.fixedTime);
+        posAcceleration.x = -Mathf.Sin(currentTime);
+
+        if(circulerMode)
+        {
+            posAcceleration.y = -Mathf.Cos(currentTime);
+        }
+    
+        rotAcceleration = -Mathf.Sin(currentTime);
+
+        currentTime += dt;
+    }
+
+    public void resetData()
+    {
+       
+        transform.position *= 0;
+
+        position *= 0;
+        posVelocity = new Vector2(1, 0);
+        posAcceleration *= 0;
+
+        rotation = 0;
+        rotVelocity = 1;
+        rotAcceleration = 0;
+
+        currentTime = 0;
     }
 }
