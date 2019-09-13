@@ -43,7 +43,7 @@ public class particle2D : MonoBehaviour
         //Euler's Method
         //F(t+dt) = F(t) + f(t)dt
         //               + (dF/dt)dt
-        position += posVelocity * dt * posMagnitudeModifier;
+        position += posVelocity * dt;
 
         //**** more to do here ****
         //v(t*dt) = v(t) + a(t)dt
@@ -52,21 +52,21 @@ public class particle2D : MonoBehaviour
     void updatePositionKinematic(float dt)
     {
         //x(t+dt) = x(t) + v(t)dt + (1/2) * a(t) * dt^2
-        position += posVelocity * dt * posMagnitudeModifier + (1 / 2) * posAcceleration * (dt * dt);
+        position += posVelocity * dt +  .5f * posAcceleration * (dt * dt);
         posVelocity += posAcceleration * dt;
     }
 
     void updateRotationEulerExplicit(float dt)
     {
   
-        rotation += rotVelocity * dt * rotMagnitudeModifier;
+        rotation += rotVelocity * dt;
 
         rotVelocity += rotAcceleration * dt;
     }
 
     void updateRotationKinematic(float dt)
     {
-        rotation += rotVelocity * dt * rotMagnitudeModifier + (1 / 2) * rotAcceleration * (dt * dt);
+        rotation += rotVelocity * dt + .5f * rotAcceleration * (dt * dt);
         rotVelocity += (rotAcceleration * dt);
     }
 
