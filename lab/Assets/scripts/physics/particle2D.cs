@@ -15,6 +15,16 @@ public enum positionUpdate
     POSITION_KINEMATIC,
 }
 
+public enum forceMode
+{
+    FORCE_GRAVITY,
+    FORCE_NORMAL,
+    FORCE_SLIDING,
+    FORCE_STATIC,
+    FORCE_KINETIC,
+    FORCE_DRAG,
+    fORCE_SPRING
+}
 public class particle2D : MonoBehaviour
 {
     //step 1
@@ -25,10 +35,21 @@ public class particle2D : MonoBehaviour
     rotationUpdate rotationMode = rotationUpdate.ROTATION_KINEMATIC;
     [SerializeField]
     positionUpdate positionMode= positionUpdate.POSITION_KINEMATIC;
+    [SerializeField]
+    forceMode f_mode = forceMode.FORCE_GRAVITY;
+
+    //Add user force
+    public Slider playerSlider;
 
     //lab 2 step 1
     public float startingMass;
     float mass, massInv;
+
+    //oak friction coefficient https://www.engineeringtoolbox.com/friction-coefficients-d_778.html
+    float coeff_static = .62f;
+    float coeffc_kinetic = .48f;
+
+
 
     public void setMass(float newMass)
     {
@@ -124,7 +145,32 @@ public class particle2D : MonoBehaviour
         //lab 2 step 4
         // Vector2 f_gravity = mass * new Vector2(0.0f, -9.81f);
         //AddForce(f_gravity);
-        AddForce(ForceGenerator.GenerateForce_Gravity(mass, -9.8f, Vector2.up));
+
+        Vector2 p_force = new Vector2(playerSlider.value, 0);
+        Vector2 f_gravity = ForceGenerator.GenerateForce_Gravity(mass, -9.8f, Vector2.up);
+        Vector2 f_normal = ForceGenerator.GenerateForce_normal(f_gravity, transform.up);
+        Vector2 f_sliding = ForceGenerator.GenerateForce_sliding(f_gravity, f_normal);
+        Vector2 f_f_static = ForceGenerator.GenerateForce_friction_static(f_normal, p_force, coeff_static);
+        switch (f_mode)
+        {
+            case forceMode.FORCE_GRAVITY:
+                AddForce(f_gravity);
+                break;
+            case forceMode.FORCE_NORMAL:
+                AddForce(f_normal);
+                break;
+            case forceMode.FORCE_SLIDING:
+                AddForce(f_sliding);
+                break;
+            case forceMode.FORCE_STATIC:
+                AddForce(p_force);
+                AddForce(f_f_static);
+                Debug.Log(p_force);
+                Debug.Log(f_f_static);
+                break;
+
+        }
+
     }
 
     public void resetData()
