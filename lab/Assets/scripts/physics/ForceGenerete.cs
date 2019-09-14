@@ -35,7 +35,7 @@ public class ForceGenerator
         }
         else
         {
-            f_friction_s = -frictionCoefficient_static * f_normal; //direction is probably -f_oposing
+            f_friction_s = -frictionCoefficient_static * f_normal.magnitude * f_opposing.normalized; //direction is probably -f_oposing
         }
         return f_friction_s;
     }
@@ -43,14 +43,15 @@ public class ForceGenerator
     public static Vector2 GenerateForce_friction_kinetic(Vector2 f_normal, Vector2 particleVelocity, float frictionCoefficient_kinetic)
     {
         // f_friction_k = -coeff*|f_normal| * unit(vel)
-        Vector2 f_friction_k = -frictionCoefficient_kinetic * new Vector2(Mathf.Abs(f_normal.x), Mathf.Abs(f_normal.y)) * particleVelocity.magnitude;
+        Vector2 f_friction_k = -frictionCoefficient_kinetic * f_normal.magnitude * particleVelocity.normalized;
         return f_friction_k;
     }
 
     public static Vector2 GenerateForce_drag(Vector2 particleVelocity, Vector2 fluidVelocity, float fluidDensity, float objectArea_crossSection, float objectDragCoefficient)
     {
-        // f_drag = (p * u^2 * area * coeff)/2, p = density, u= velocity  
-        Vector2 f_drag = (fluidDensity * (particleVelocity * particleVelocity) * objectArea_crossSection * objectDragCoefficient) / 2;
+        // f_drag = (p * u^2 * area * coeff)/2, p = density, u= velocity  https://www.grc.nasa.gov/WWW/k-12/airplane/drageq.html
+        float relativeVelocity = (particleVelocity - fluidVelocity).magnitude;
+        Vector2 f_drag = -particleVelocity.normalized * (fluidDensity * (relativeVelocity * relativeVelocity) * objectArea_crossSection * objectDragCoefficient) / 2;
         return f_drag;
     }
 

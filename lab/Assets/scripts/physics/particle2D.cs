@@ -17,13 +17,14 @@ public enum positionUpdate
 
 public enum forceMode
 {
+    FORCE_USER,
     FORCE_GRAVITY,
     FORCE_NORMAL,
     FORCE_SLIDING,
-    FORCE_STATIC,
-    FORCE_KINETIC,
+    FORCE_F_STATIC,
+    FORCE_F_KINETIC,
     FORCE_DRAG,
-    fORCE_SPRING
+    FORCE_SPRING
 }
 public class particle2D : MonoBehaviour
 {
@@ -109,6 +110,12 @@ public class particle2D : MonoBehaviour
     void Start()
     {
         setMass(startingMass);
+
+        //for testing friction
+        if(f_mode == forceMode.FORCE_F_KINETIC || f_mode == forceMode.FORCE_DRAG)
+        {
+            AddForce(new Vector2(500, 0)); 
+        }
     }
 
     // Update is called once per frame
@@ -151,8 +158,14 @@ public class particle2D : MonoBehaviour
         Vector2 f_normal = ForceGenerator.GenerateForce_normal(f_gravity, transform.up);
         Vector2 f_sliding = ForceGenerator.GenerateForce_sliding(f_gravity, f_normal);
         Vector2 f_f_static = ForceGenerator.GenerateForce_friction_static(f_normal, p_force, coeff_static);
+        Vector2 f_f_kinetic = ForceGenerator.GenerateForce_friction_kinetic(f_normal, posVelocity, coeffc_kinetic);
+        Vector2 f_drag = ForceGenerator.GenerateForce_drag(posVelocity, new Vector2(5, 0), 1.225f, 1, 1.05f);
+        Vector2 f_spring = ForceGenerator.GenerateForce_spring(transform.position, Vector2.zero,.5f,1.5f);
         switch (f_mode)
         {
+            case forceMode.FORCE_USER:
+                AddForce(p_force);
+                break;
             case forceMode.FORCE_GRAVITY:
                 AddForce(f_gravity);
                 break;
@@ -162,11 +175,19 @@ public class particle2D : MonoBehaviour
             case forceMode.FORCE_SLIDING:
                 AddForce(f_sliding);
                 break;
-            case forceMode.FORCE_STATIC:
+            case forceMode.FORCE_F_STATIC:
                 AddForce(p_force);
                 AddForce(f_f_static);
-                Debug.Log(p_force);
-                Debug.Log(f_f_static);
+                break;
+            case forceMode.FORCE_F_KINETIC:
+                AddForce(f_f_kinetic);
+                break;
+            case forceMode.FORCE_DRAG:
+                AddForce(f_drag);
+                break;
+            case forceMode.FORCE_SPRING:
+                AddForce(f_spring);
+                AddForce(f_gravity);
                 break;
 
         }
