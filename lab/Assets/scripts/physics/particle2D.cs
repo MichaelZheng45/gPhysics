@@ -46,11 +46,26 @@ public class particle2D : MonoBehaviour
     public float startingMass;
     float mass, massInv;
 
-    //oak friction coefficient https://www.engineeringtoolbox.com/friction-coefficients-d_778.html
     float coeff_static = .62f;
     float coeffc_kinetic = .48f;
 
+    //Position Force
+    Vector2 force;
 
+    //Rotational Force
+    float inertia, inertiaInv;
+    float torque;
+
+    public float getInertia()
+    {
+        return inertia;
+    }
+
+    public void setInertia(float newInertia)
+    {
+        inertia = newInertia;
+        inertiaInv = inertia > 0.0f ? 1.0f / inertia : 0;
+    }
 
     public void setMass(float newMass)
     {
@@ -66,11 +81,15 @@ public class particle2D : MonoBehaviour
     }
 
     //force application lab 2 step 2
-    Vector2 force;
     public void AddForce(Vector2 newForce)
     {
         //D'Alembert
         force += newForce;
+    }
+
+    public void AddTorque(float newTorque)
+    {
+        torque += newTorque;
     }
 
     void updateAcceleration()
@@ -78,6 +97,10 @@ public class particle2D : MonoBehaviour
         //newtons 2nd law
         posAcceleration = force * massInv;
         force.Set(0.0f, 0.0f);
+
+        //torque
+        rotAcceleration = torque * inertiaInv;
+        torque = 0;
     }
 
     //step 2
@@ -110,6 +133,11 @@ public class particle2D : MonoBehaviour
     void Start()
     {
         setMass(startingMass);
+
+        switch(inertiaType)
+        {
+
+        }
 
         //for testing friction
         if(f_mode == forceMode.FORCE_F_KINETIC || f_mode == forceMode.FORCE_DRAG)

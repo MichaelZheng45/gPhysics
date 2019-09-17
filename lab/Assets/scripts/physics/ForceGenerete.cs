@@ -62,4 +62,11 @@ public class ForceGenerator
         Vector2 f_spring = -springStiffnessCoefficient * ((particlePosition - anchorPosition).magnitude - springRestingLength) * direction;
         return f_spring;
     }
+
+    public static float GenerateForce_Torque(Vector2 appliedForce, Vector2 centerOfMass)
+    {
+        //t= px*fy - pyfx
+        float f_torque = (centerOfMass.x*appliedForce.y) - (centerOfMass.y*appliedForce.x);
+        return f_torque;
+    }
 }
