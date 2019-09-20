@@ -38,6 +38,8 @@ public class particle2D : MonoBehaviour
     positionUpdate positionMode= positionUpdate.POSITION_KINEMATIC;
     [SerializeField]
     forceMode f_mode = forceMode.FORCE_GRAVITY;
+    [SerializeField]
+    InertiaTypes i_mode;
 
     //Add user force
     public Slider playerSlider;
@@ -51,6 +53,9 @@ public class particle2D : MonoBehaviour
 
     //Position Force
     Vector2 force;
+
+    //Center of mass
+    Vector2 centOfMass = new Vector2(0.5f,0.5f);
 
     //Rotational Force
     float inertia, inertiaInv;
@@ -134,13 +139,28 @@ public class particle2D : MonoBehaviour
     {
         setMass(startingMass);
 
-        switch(inertiaType)
+        switch (i_mode)
         {
+            case InertiaTypes.RECTANGE:
+                inertia = InertiaGenerator.GenerateInertia_Rectangle(mass, centOfMass.x * 2, centOfMass.y * 2);
+                break;
 
+            case InertiaTypes.CIRCLE:
+                inertia = InertiaGenerator.GenerateInertia_Circle(mass, centOfMass.x);
+                break;
+
+            case InertiaTypes.RING:
+                inertia = InertiaGenerator.GenerateInertia_Ring(mass, centOfMass.x, 0.4f);
+                break;
+
+            case InertiaTypes.ROD:
+                inertia = InertiaGenerator.GenerateInertia_Rectangle(mass, centOfMass.x, centOfMass.y);
+                break;
         }
+        setInertia(inertia);
 
         //for testing friction
-        if(f_mode == forceMode.FORCE_F_KINETIC || f_mode == forceMode.FORCE_DRAG)
+        if (f_mode == forceMode.FORCE_F_KINETIC || f_mode == forceMode.FORCE_DRAG)
         {
             AddForce(new Vector2(500, 0)); 
         }
@@ -219,6 +239,8 @@ public class particle2D : MonoBehaviour
                 break;
 
         }
+
+        AddTorque(ForceGenerator.GenerateForce_Torque(new Vector2(10, 1), new Vector2(0.5f,0.5f)));
 
     }
 

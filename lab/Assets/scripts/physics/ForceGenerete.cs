@@ -67,6 +67,9 @@ public class ForceGenerator
     {
         //t= px*fy - pyfx
         float f_torque = (centerOfMass.x*appliedForce.y) - (centerOfMass.y*appliedForce.x);
+        Debug.Log("Top half: " + centerOfMass.x * appliedForce.y);
+        Debug.Log("Bottom Half: " + centerOfMass.y * appliedForce.x);
+        Debug.Log("Torque: " + f_torque);
         return f_torque;
     }
 }
