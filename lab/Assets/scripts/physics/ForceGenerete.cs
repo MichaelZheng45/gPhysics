@@ -14,7 +14,7 @@ public class ForceGenerator
     public static Vector2 GenerateForce_normal(Vector2 f_gravity, Vector2 surfaceNormal_unit)
     {
         // f_normal = proj(f_gravity, surfaceNormal_unit)
-        Vector2 f_normal = f_gravity.magnitude * surfaceNormal_unit;
+        Vector2 f_normal = Vector3.Project(-f_gravity, surfaceNormal_unit);
         return f_normal;
     }
 
