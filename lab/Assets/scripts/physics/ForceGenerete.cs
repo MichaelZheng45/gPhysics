@@ -63,10 +63,11 @@ public class ForceGenerator
         return f_spring;
     }
 
-    public static float GenerateForce_Torque(Vector2 appliedForce, Vector2 centerOfMass)
+    public static float GenerateForce_Torque(Vector2 appliedForce, Vector2 centerOfMass, Vector2 point)
     {
         //t= px*fy - pyfx
-        float f_torque = (centerOfMass.x*appliedForce.y) - (centerOfMass.y*appliedForce.x);
+        Vector2 arm = (point - centerOfMass);
+        float f_torque = (arm.x*appliedForce.y) - (arm.y*appliedForce.x);
         Debug.Log("Top half: " + centerOfMass.x * appliedForce.y);
         Debug.Log("Bottom Half: " + centerOfMass.y * appliedForce.x);
         Debug.Log("Torque: " + f_torque);
