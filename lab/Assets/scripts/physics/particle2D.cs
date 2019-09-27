@@ -142,19 +142,19 @@ public class particle2D : MonoBehaviour
         switch (i_mode)
         {
             case InertiaTypes.RECTANGE:
-                inertia = InertiaGenerator.GenerateInertia_Rectangle(mass, centOfMass.x * 2, centOfMass.y * 2);
+                inertia = InertiaGenerator.GenerateInertia_Rectangle(mass,1, 1);
                 break;
 
             case InertiaTypes.CIRCLE:
-                inertia = InertiaGenerator.GenerateInertia_Circle(mass, centOfMass.x);
+                inertia = InertiaGenerator.GenerateInertia_Circle(mass, 1);
                 break;
 
             case InertiaTypes.RING:
-                inertia = InertiaGenerator.GenerateInertia_Ring(mass, centOfMass.x, 0.4f);
+                inertia = InertiaGenerator.GenerateInertia_Ring(mass, 1, 0.8f);
                 break;
 
             case InertiaTypes.ROD:
-                inertia = InertiaGenerator.GenerateInertia_Rectangle(mass, centOfMass.x, centOfMass.y);
+                inertia = InertiaGenerator.GenerateInertia_Rod(mass, 1);
                 break;
         }
         setInertia(inertia);
@@ -240,7 +240,7 @@ public class particle2D : MonoBehaviour
 
         }
 
-        AddTorque(ForceGenerator.GenerateForce_Torque(new Vector2(10, 1), new Vector2(0.5f,0.5f)));
+        AddTorque(ForceGenerator.GenerateForce_Torque(new Vector2(10, 1), new Vector2(0.5f,0.5f), new Vector2 (0,1)));
 
     }
 
