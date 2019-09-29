@@ -18,8 +18,34 @@ public class ObjectBoundingBoxHull2D : CollisionHull2D
 
     public override bool TestCollisionVsCircle(CircleHull2D other)
     {
-        //See circle
-        return false;
+        Vector2 thisPos, otherPos;
+        //move circle center into box's space by multiplying by its world transform inverse
+        Vector4 rotatedPos = other.transform.localToWorldMatrix.inverse * new Vector4(particle.position.x, particle.position.y, 0, 0);
+        otherPos = new Vector2(rotatedPos.x, rotatedPos.y);
+        thisPos = other.getParticle().position;
+
+        //find the closest point of on the rectangle to the circle
+        float newX = Mathf.Clamp(otherPos.x, thisPos.x - length * 0.5f, thisPos.x + length / 2);
+        float newY = Mathf.Clamp(otherPos.y, thisPos.y - height * 0.5f, thisPos.x + height / 2);
+        Vector2 closestPoint = new Vector2(newX, newY);
+
+        //get "radius" of this ractangle
+        Vector2 rectangleDiff = thisPos - closestPoint;
+        float rectangleToClosest = Vector2.Dot(rectangleDiff, rectangleDiff);
+
+        //calculate distance between particles
+        Vector2 objDiff = thisPos - otherPos;
+        float particleDistance = Vector2.Dot(rectangleDiff, rectangleDiff);
+
+        //find the sum radii
+        float sumRadii = other.radius + Mathf.Sqrt(rectangleToClosest);
+        sumRadii *= sumRadii;
+
+        //compare
+        if (particleDistance <= sumRadii)
+            return true;
+        else
+            return false;
     }
 
     public override bool TestCollisionVsAABB(AxisAlignedBoundingBoxHull2D other)
