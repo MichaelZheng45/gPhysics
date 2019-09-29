@@ -19,13 +19,14 @@ public abstract class CollisionHull2D : MonoBehaviour
 
     protected particle2D particle { get; set; }
 
+    public particle2D getParticle()
+    {
+        return particle;
+    }
+
     void Start()
     {
         particle = GetComponent<particle2D>();
-    }
-    void Update()
-    {
-        
     }
 
     public static bool TestCollision(CollisionHullType2D a, CollisionHullType2D b)

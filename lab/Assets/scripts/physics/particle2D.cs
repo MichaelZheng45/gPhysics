@@ -240,7 +240,7 @@ public class particle2D : MonoBehaviour
 
         }
 
-        AddTorque(ForceGenerator.GenerateForce_Torque(new Vector2(10, 1), new Vector2(0.5f,0.5f), new Vector2(0,1));
+        AddTorque(ForceGenerator.GenerateForce_Torque(new Vector2(10, 1), new Vector2(0.5f,0.5f), new Vector2(0,1)));
 
     }
 
