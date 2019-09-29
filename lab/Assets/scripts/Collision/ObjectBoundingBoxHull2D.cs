@@ -26,11 +26,7 @@ public class ObjectBoundingBoxHull2D : CollisionHull2D
             }
 
         }
-<<<<<<< HEAD
-        else if(other.getTypeHull() == CollisionHullType2D.hull_aabb)
-=======
         else if (other.getTypeHull() == CollisionHullType2D.hull_aabb)
->>>>>>> 392a602edce8bdaff6a0da3ca13eb8b095b902e6
         {
             if (TestCollisionVsAABB((AxisAlignedBoundingBoxHull2D)other))
             {
