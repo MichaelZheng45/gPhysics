@@ -9,6 +9,44 @@ public class CircleHull2D : CollisionHull2D
     [Range(0f, 100f)]
     public float radius;
 
+    private void Update()
+    {
+        if (other.getTypeHull() == CollisionHullType2D.hull_obb)
+        {
+            if (TestCollisionVsOBB((ObjectBoundingBoxHull2D)other))
+            {
+                GetComponent<MeshRenderer>().material = green;
+            }
+            else
+            {
+                GetComponent<MeshRenderer>().material = red;
+            }
+
+        }
+        else if (other.getTypeHull() == CollisionHullType2D.hull_aabb)
+        {
+            if (TestCollisionVsAABB((AxisAlignedBoundingBoxHull2D)other))
+            {
+                GetComponent<MeshRenderer>().material = green;
+            }
+            else
+            {
+                GetComponent<MeshRenderer>().material = red;
+            }
+        }
+        else
+        {
+            if (TestCollisionVsCircle((CircleHull2D)other))
+            {
+                GetComponent<MeshRenderer>().material = green;
+            }
+            else
+            {
+                GetComponent<MeshRenderer>().material = red;
+            }
+        }
+    }
+
     public override bool TestCollisionVsCircle(CircleHull2D other)
     {
         //Collision passes if distance between them <= sumk of radii
@@ -54,8 +92,8 @@ public class CircleHull2D : CollisionHull2D
         otherPos = other.getParticle().position;
 
         //find the closest point of on the rectangle to the circle
-        float newX = Mathf.Clamp(thisPos.x, otherPos.x - other.length / 2f, otherPos.x + other.length / 2);
-        float newY = Mathf.Clamp(thisPos.y, otherPos.y - other.height / 2f, otherPos.x + other.height / 2);
+        float newX = Mathf.Clamp(thisPos.x, otherPos.x - other.length / 2f, otherPos.x + other.length / 2f);
+        float newY = Mathf.Clamp(thisPos.y, otherPos.y - other.height / 2f, otherPos.y + other.height / 2f);
         Vector2 closestPoint = new Vector2(newX, newY);
 
         //act like it is now a circle, calculate "radius"
@@ -92,13 +130,14 @@ public class CircleHull2D : CollisionHull2D
 
         Vector2 thisPos, otherPos;
         //move circle center into box's space by multiplying by its world transform inverse
-        Vector4 rotatedPos = other.transform.localToWorldMatrix.inverse * new Vector4(particle.position.x, particle.position.y, 0 ,0);
-        thisPos = new Vector2(rotatedPos.x, rotatedPos.y);
         otherPos = other.getParticle().position;
+        Vector2 rotatedPos = other.transform.localToWorldMatrix.inverse * (particle.position - otherPos);
+        thisPos = rotatedPos + otherPos;
+        
 
         //find the closest point of on the rectangle to the circle
-        float newX = Mathf.Clamp(thisPos.x, otherPos.x - other.length / 2f, otherPos.x + other.length / 2);
-        float newY = Mathf.Clamp(thisPos.y, otherPos.y - other.height / 2f, otherPos.x + other.height / 2);
+        float newX = Mathf.Clamp(thisPos.x, otherPos.x - other.length / 2f, otherPos.x + other.length / .5f);
+        float newY = Mathf.Clamp(thisPos.y, otherPos.y - other.height / 2f, otherPos.y + other.height / .5f);
         Vector2 closestPoint = new Vector2(newX, newY);
 
         //act like it is now a circle, calculate "radius"

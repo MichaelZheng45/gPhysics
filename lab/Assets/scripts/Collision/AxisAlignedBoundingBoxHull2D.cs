@@ -23,10 +23,23 @@ public class AxisAlignedBoundingBoxHull2D : CollisionHull2D
             {
                 GetComponent<MeshRenderer>().material = red;
             }
+
+        }
+        else if(other.getTypeHull() == CollisionHullType2D.hull_aabb)
+
+        {
+            if (TestCollisionVsAABB((AxisAlignedBoundingBoxHull2D)other))
+            {
+                GetComponent<MeshRenderer>().material = green;
+            }
+            else
+            {
+                GetComponent<MeshRenderer>().material = red;
+            }
         }
         else
         {
-            if (TestCollisionVsAABB((AxisAlignedBoundingBoxHull2D)other))
+            if (TestCollisionVsCircle((CircleHull2D)other))
             {
                 GetComponent<MeshRenderer>().material = green;
             }
@@ -39,20 +52,22 @@ public class AxisAlignedBoundingBoxHull2D : CollisionHull2D
 
     public override bool TestCollisionVsCircle(CircleHull2D other)
     {
-        Vector2 thisPos = particle.position, 
-                otherPos = other.getParticle().position;
+        Vector2 thisPos, otherPos;
+        thisPos = particle.position;
+        otherPos = other.getParticle().position;
+
         //find the closest point of on the rectangle to the circle
-        float newX = Mathf.Clamp(otherPos.x, thisPos.x - length * 0.5f, thisPos.x + length / 2);
-        float newY = Mathf.Clamp(otherPos.y, thisPos.y - height * 0.5f, thisPos.x + height / 2);
+        float newX = Mathf.Clamp(thisPos.x, otherPos.x - other.radius, otherPos.x + other.radius);
+        float newY = Mathf.Clamp(thisPos.y, otherPos.y - other.radius, otherPos.y + other.radius);
         Vector2 closestPoint = new Vector2(newX, newY);
 
-        //get "radius" of this ractangle
-        Vector2 rectangleDiff = thisPos - closestPoint;
+        //act like it is now a circle, calculate "radius"
+        Vector2 rectangleDiff = otherPos - closestPoint;
         float rectangleToClosest = Vector2.Dot(rectangleDiff, rectangleDiff);
 
         //calculate distance between particles
         Vector2 objDiff = thisPos - otherPos;
-        float particleDistance = Vector2.Dot(rectangleDiff, rectangleDiff);
+        float particleDistance = Vector2.Dot(objDiff, objDiff);
 
         //find the sum radii
         float sumRadii = other.radius + Mathf.Sqrt(rectangleToClosest);
@@ -87,7 +102,7 @@ public class AxisAlignedBoundingBoxHull2D : CollisionHull2D
         thisMin = new Vector2(particle.position.x - thisLength, particle.position.y - thisHeight);
         otherMin = new Vector2(other.particle.position.x - otherLength, other.particle.position.y - otherHeight);
 
-        bool check1 = (thisMax.x >= otherMin.x && thisMax.y >= otherMax.y);
+        bool check1 = (thisMax.x >= otherMin.x && thisMax.y >= otherMin.y);
         bool check2 = (otherMax.x >= thisMin.x && otherMax.y >= thisMin.y);
 
         if(check1 && check2)
@@ -147,11 +162,8 @@ public class AxisAlignedBoundingBoxHull2D : CollisionHull2D
         //find max of all points
         otherMax = new Vector2(Mathf.Max(p1.x, p2.x, p3.x, p4.x) + otherPosition.x, Mathf.Max(p1.y, p2.y, p3.y, p4.y) + otherPosition.y);
         otherMin = new Vector2(Mathf.Min(p1.x, p2.x, p3.x, p4.x) + otherPosition.x, Mathf.Min(p1.y, p2.y, p3.y, p4.y) + otherPosition.y);
-        Debug.Log("otherMax: " +otherMax);
-        Debug.Log("otherMin: " +otherMin);
-        Debug.Log("thisMax: " + thisMax);
-        Debug.Log("thisMin: " + thisMin);
-        if ((thisMax.x >= otherMin.x && thisMax.y >= otherMax.y) && (otherMax.x >= thisMin.x && otherMax.y >= thisMin.y))
+
+        if ((thisMax.x >= otherMin.x && thisMax.y >= otherMin.y) && (otherMax.x >= thisMin.x && otherMax.y >= thisMin.y))
         {
             check1 = true;
         }
@@ -159,19 +171,23 @@ public class AxisAlignedBoundingBoxHull2D : CollisionHull2D
         {
             check1 = false;
         }
-      
 
-        p1 = other.transform.localToWorldMatrix.inverse * new Vector2(particle.position.x + thisLength, particle.position.y + thisHeight);
-        p2 = other.transform.localToWorldMatrix.inverse * new Vector2(particle.position.x + thisLength, particle.position.y - thisHeight);
-        p3 = other.transform.localToWorldMatrix.inverse * new Vector2(particle.position.x - thisLength, particle.position.y - thisHeight);
-        p4 = other.transform.localToWorldMatrix.inverse * new Vector2(particle.position.x - thisLength, particle.position.y + thisHeight);
+        p1 = other.transform.localToWorldMatrix.inverse * (new Vector2(particle.position.x + thisLength, particle.position.y + thisHeight) - otherPosition);
+        p2 = other.transform.localToWorldMatrix.inverse * (new Vector2(particle.position.x + thisLength, particle.position.y - thisHeight) - otherPosition);
+        p3 = other.transform.localToWorldMatrix.inverse * (new Vector2(particle.position.x - thisLength, particle.position.y - thisHeight) - otherPosition);
+        p4 = other.transform.localToWorldMatrix.inverse * (new Vector2(particle.position.x - thisLength, particle.position.y + thisHeight) - otherPosition);
+        p1 += otherPosition;
+        p2 += otherPosition;
+        p3 += otherPosition;
+        p4 += otherPosition;
 
         thisMax = new Vector2(Mathf.Max(p1.x, p2.x, p3.x, p4.x), Mathf.Max(p1.y, p2.y, p3.y, p4.y));
         thisMin = new Vector2(Mathf.Min(p1.x, p2.x, p3.x, p4.x), Mathf.Min(p1.y, p2.y, p3.y, p4.y));
 
         otherMax = new Vector2(otherPosition.x + otherLength, otherPosition.y + otherHeight);
         otherMin = new Vector2(otherPosition.x - otherLength, otherPosition.y - otherHeight);
-        if ((thisMax.x >= otherMin.x && thisMax.y >= otherMax.y) && (otherMax.x >= thisMin.x && otherMax.y >= thisMin.y))
+
+        if ((thisMax.x >= otherMin.x && thisMax.y >= otherMin.y) && (otherMax.x >= thisMin.x && otherMax.y >= thisMin.y))
         {
             check2 = true;
         }
@@ -179,7 +195,7 @@ public class AxisAlignedBoundingBoxHull2D : CollisionHull2D
         {
             check2 = false;
         }
-
+        Debug.Log("check2: " + check2);
         if (check1 && check2)
         {
             return true;

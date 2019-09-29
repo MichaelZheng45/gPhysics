@@ -39,7 +39,7 @@ public abstract class CollisionHull2D : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log("doing");
+        //Debug.Log("doing");
         if(other.type == CollisionHullType2D.hull_obb)
         {
             if(TestCollisionVsOBB((ObjectBoundingBoxHull2D)other))
@@ -51,9 +51,20 @@ public abstract class CollisionHull2D : MonoBehaviour
                 GetComponent<MeshRenderer>().material = red;
             }
         }
-        else
+        else if (other.type == CollisionHullType2D.hull_aabb)
         {
             if (TestCollisionVsAABB((AxisAlignedBoundingBoxHull2D)other))
+            {
+                GetComponent<MeshRenderer>().material = green;
+            }
+            else
+            {
+                GetComponent<MeshRenderer>().material = red;
+            }
+        }
+        else
+        {
+            if (TestCollisionVsCircle((CircleHull2D)other))
             {
                 GetComponent<MeshRenderer>().material = green;
             }
