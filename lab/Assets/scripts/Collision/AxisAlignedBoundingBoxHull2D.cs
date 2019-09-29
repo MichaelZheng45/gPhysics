@@ -158,10 +158,12 @@ public class AxisAlignedBoundingBoxHull2D : CollisionHull2D
         p2 = rotatePoint(new Vector2(otherLength, -otherHeight), other.rotation);
         p3 = rotatePoint(new Vector2(-otherLength, -otherHeight), other.rotation);
         p4 = rotatePoint(new Vector2(-otherLength, otherHeight), other.rotation);
+
         //find max of all points
         otherMax = new Vector2(Mathf.Max(p1.x, p2.x, p3.x, p4.x) + otherPosition.x, Mathf.Max(p1.y, p2.y, p3.y, p4.y) + otherPosition.y);
         otherMin = new Vector2(Mathf.Min(p1.x, p2.x, p3.x, p4.x) + otherPosition.x, Mathf.Min(p1.y, p2.y, p3.y, p4.y) + otherPosition.y);
 
+        //do check
         if ((thisMax.x >= otherMin.x && thisMax.y >= otherMin.y) && (otherMax.x >= thisMin.x && otherMax.y >= thisMin.y))
         {
             check1 = true;
@@ -171,6 +173,7 @@ public class AxisAlignedBoundingBoxHull2D : CollisionHull2D
             check1 = false;
         }
 
+        //for each corner, move it relative to the box then transform by the world matrix inverse. Finally add position back
         p1 = other.transform.localToWorldMatrix.inverse * (new Vector2(particle.position.x + thisLength, particle.position.y + thisHeight) - otherPosition);
         p2 = other.transform.localToWorldMatrix.inverse * (new Vector2(particle.position.x + thisLength, particle.position.y - thisHeight) - otherPosition);
         p3 = other.transform.localToWorldMatrix.inverse * (new Vector2(particle.position.x - thisLength, particle.position.y - thisHeight) - otherPosition);
@@ -180,6 +183,7 @@ public class AxisAlignedBoundingBoxHull2D : CollisionHull2D
         p3 += otherPosition;
         p4 += otherPosition;
 
+        //get the extremes for min and max
         thisMax = new Vector2(Mathf.Max(p1.x, p2.x, p3.x, p4.x), Mathf.Max(p1.y, p2.y, p3.y, p4.y));
         thisMin = new Vector2(Mathf.Min(p1.x, p2.x, p3.x, p4.x), Mathf.Min(p1.y, p2.y, p3.y, p4.y));
 
@@ -194,7 +198,6 @@ public class AxisAlignedBoundingBoxHull2D : CollisionHull2D
         {
             check2 = false;
         }
-        Debug.Log("check2: " + check2);
         if (check1 && check2)
         {
             return true;

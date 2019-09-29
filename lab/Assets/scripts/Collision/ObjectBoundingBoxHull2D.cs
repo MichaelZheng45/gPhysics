@@ -52,24 +52,23 @@ public class ObjectBoundingBoxHull2D : CollisionHull2D
 
     public override bool TestCollisionVsCircle(CircleHull2D other)
     {
-        Vector2 thisPos = particle.position;
         Vector2 otherPos;
         //move circle center into box's space by multiplying by its world transform inverse
         otherPos = other.getParticle().position;
-        Vector2 rotatedPos = transform.localToWorldMatrix.inverse * (otherPos - thisPos);
-        otherPos = rotatedPos + thisPos;
+        Vector2 rotatedPos = transform.localToWorldMatrix.inverse * (otherPos - particle.position);
+        rotatedPos += particle.position;
 
         //find the closest point of on the rectangle to the circle
-        float newX = Mathf.Clamp(thisPos.x, otherPos.x - other.radius, otherPos.x + other.radius);
-        float newY = Mathf.Clamp(thisPos.y, otherPos.y - other.radius, otherPos.y + other.radius);
+        float newX = Mathf.Clamp(rotatedPos.x, particle.position.x - length * .5f, particle.position.x + length * .5f);
+        float newY = Mathf.Clamp(rotatedPos.y, particle.position.y - height * .5f, particle.position.y + height * .5f);
         Vector2 closestPoint = new Vector2(newX, newY);
 
         //act like it is now a circle, calculate "radius"
-        Vector2 rectangleDiff = otherPos - closestPoint;
+        Vector2 rectangleDiff = particle.position - closestPoint;
         float rectangleToClosest = Vector2.Dot(rectangleDiff, rectangleDiff);
 
         //calculate distance between particles
-        Vector2 objDiff = thisPos - otherPos;
+        Vector2 objDiff = rotatedPos - particle.position;
         float particleDistance = Vector2.Dot(objDiff, objDiff);
 
         //find the sum radii
@@ -141,6 +140,7 @@ public class ObjectBoundingBoxHull2D : CollisionHull2D
             check1 = false;
         }
 
+        //for each corner, move it relative to the box then transform by the world matrix inverse. Finally add position back
         p1 = transform.localToWorldMatrix.inverse * (new Vector2(otherPosition.x + otherLength, otherPosition.y + otherHeight) - particle.position);
         p2 = transform.localToWorldMatrix.inverse * (new Vector2(otherPosition.x + otherLength, otherPosition.y - otherHeight) - particle.position);
         p3 = transform.localToWorldMatrix.inverse * (new Vector2(otherPosition.x - otherLength, otherPosition.y - otherHeight) - particle.position);
@@ -150,6 +150,7 @@ public class ObjectBoundingBoxHull2D : CollisionHull2D
         p3 += particle.position;
         p4 += particle.position;
 
+        //get the extremes for min and max
         otherMax = new Vector2(Mathf.Max(p1.x, p2.x, p3.x, p4.x), Mathf.Max(p1.y, p2.y, p3.y, p4.y));
         otherMin = new Vector2(Mathf.Min(p1.x, p2.x, p3.x, p4.x), Mathf.Min(p1.y, p2.y, p3.y, p4.y));
 
@@ -216,6 +217,7 @@ public class ObjectBoundingBoxHull2D : CollisionHull2D
         p3 = rotatePoint(new Vector2(-thisLength, -thisHeight), rotation) + particle.position;
         p4 = rotatePoint(new Vector2(-thisLength, thisHeight), rotation) + particle.position;
 
+        //for each corner, move it relative to the box then transform by the world matrix inverse. Finally add position back
         p1 = other.transform.localToWorldMatrix.inverse * (p1 - otherPosition);
         p2 = other.transform.localToWorldMatrix.inverse * (p2 - otherPosition);
         p3 = other.transform.localToWorldMatrix.inverse * (p3 - otherPosition);
@@ -247,6 +249,7 @@ public class ObjectBoundingBoxHull2D : CollisionHull2D
         p3 = rotatePoint(new Vector2(-otherLength, -otherHeight), rotation) + otherPosition;
         p4 = rotatePoint(new Vector2(-otherLength, otherHeight), rotation) + otherPosition;
 
+        //for each corner, move it relative to the box then transform by the world matrix inverse. Finally add position back
         p1 = transform.localToWorldMatrix.inverse * (p1 - particle.position);
         p2 = transform.localToWorldMatrix.inverse * (p2 - particle.position);
         p3 = transform.localToWorldMatrix.inverse * (p3 - particle.position);
@@ -271,7 +274,6 @@ public class ObjectBoundingBoxHull2D : CollisionHull2D
         {
             check2 = false;
         }
-        Debug.Log("check2: " + check2);
         if (check1 && check2)
         {
             return true;

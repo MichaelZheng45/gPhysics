@@ -39,7 +39,6 @@ public abstract class CollisionHull2D : MonoBehaviour
 
     private void Update()
     {
-        //Debug.Log("doing");
         if(other.type == CollisionHullType2D.hull_obb)
         {
             if(TestCollisionVsOBB((ObjectBoundingBoxHull2D)other))
