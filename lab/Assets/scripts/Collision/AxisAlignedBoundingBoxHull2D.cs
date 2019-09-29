@@ -9,18 +9,34 @@ public class AxisAlignedBoundingBoxHull2D : CollisionHull2D
     public AxisAlignedBoundingBoxHull2D() : base(CollisionHullType2D.hull_aabb) { }
 
     public float length, height;
-   
 
-    void Start()
+
+    private void Update()
     {
-        
+        if (other.getTypeHull() == CollisionHullType2D.hull_obb)
+        {
+            if (TestCollisionVsOBB((ObjectBoundingBoxHull2D)other))
+            {
+                GetComponent<MeshRenderer>().material = green;
+            }
+            else
+            {
+                GetComponent<MeshRenderer>().material = red;
+            }
+        }
+        else
+        {
+            if (TestCollisionVsAABB((AxisAlignedBoundingBoxHull2D)other))
+            {
+                GetComponent<MeshRenderer>().material = green;
+            }
+            else
+            {
+                GetComponent<MeshRenderer>().material = red;
+            }
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public override bool TestCollisionVsCircle(CircleHull2D other)
     {
         //See circle
@@ -106,11 +122,13 @@ public class AxisAlignedBoundingBoxHull2D : CollisionHull2D
         p2 = rotatePoint(new Vector2(otherLength, -otherHeight), other.rotation);
         p3 = rotatePoint(new Vector2(-otherLength, -otherHeight), other.rotation);
         p4 = rotatePoint(new Vector2(-otherLength, otherHeight), other.rotation);
-
         //find max of all points
         otherMax = new Vector2(Mathf.Max(p1.x, p2.x, p3.x, p4.x) + otherPosition.x, Mathf.Max(p1.y, p2.y, p3.y, p4.y) + otherPosition.y);
         otherMin = new Vector2(Mathf.Min(p1.x, p2.x, p3.x, p4.x) + otherPosition.x, Mathf.Min(p1.y, p2.y, p3.y, p4.y) + otherPosition.y);
-
+        Debug.Log("otherMax: " +otherMax);
+        Debug.Log("otherMin: " +otherMin);
+        Debug.Log("thisMax: " + thisMax);
+        Debug.Log("thisMin: " + thisMin);
         if ((thisMax.x >= otherMin.x && thisMax.y >= otherMax.y) && (otherMax.x >= thisMin.x && otherMax.y >= thisMin.y))
         {
             check1 = true;
@@ -119,6 +137,7 @@ public class AxisAlignedBoundingBoxHull2D : CollisionHull2D
         {
             check1 = false;
         }
+      
 
         p1 = other.transform.localToWorldMatrix.inverse * new Vector2(particle.position.x + thisLength, particle.position.y + thisHeight);
         p2 = other.transform.localToWorldMatrix.inverse * new Vector2(particle.position.x + thisLength, particle.position.y - thisHeight);
@@ -139,7 +158,7 @@ public class AxisAlignedBoundingBoxHull2D : CollisionHull2D
             check2 = false;
         }
 
-        if(check1 && check2)
+        if (check1 && check2)
         {
             return true;
         }

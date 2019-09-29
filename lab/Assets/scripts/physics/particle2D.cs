@@ -193,13 +193,8 @@ public class particle2D : MonoBehaviour
         }
         transform.position = position;
 
-
         //accelerationUpdate
         updateAcceleration();
-
-        //lab 2 step 4
-        // Vector2 f_gravity = mass * new Vector2(0.0f, -9.81f);
-        //AddForce(f_gravity);
 
         Vector2 p_force = new Vector2(playerSlider.value, 0);
         Vector2 f_gravity = ForceGenerator.GenerateForce_Gravity(mass, -9.8f, Vector2.up);
@@ -239,9 +234,6 @@ public class particle2D : MonoBehaviour
                 break;
 
         }
-
-        AddTorque(ForceGenerator.GenerateForce_Torque(new Vector2(10, 1), new Vector2(0.5f,0.5f), new Vector2(0,1)));
-
     }
 
     public void resetData()
