@@ -39,6 +39,16 @@ public class CircleHull2D : CollisionHull2D
     {
         //Collision Passes if closest point on box is within radius of circle
         //Calculate closest point on box by clamping center; closes point vs circle test
+        //1. get both centers
+        //2. find closest point as = circle center maxed by length and width of rectangle
+        //3. find difference between center of box and closest point
+        //4. distance of closest point = square root of (dot product(difference))
+        //5. get difference between two centers
+        //6. center_distance^2 = dot_product(difference of two centers)
+        //7. take sum of radius and closest point distance
+        //8. square sum total
+        //9. compare distance^2 <= sum^2
+
         Vector2 thisPos, otherPos;
         thisPos = particle.position;
         otherPos = other.getParticle().position;
@@ -70,7 +80,15 @@ public class CircleHull2D : CollisionHull2D
     public override bool TestCollisionVsOBB(ObjectBoundingBoxHull2D other)
     {
         //same as aabb but first
-
+        //1. find new position center of circle rotated around by multuplying by other's world transform inverse
+        //2. find closest point as = circle center maxed by length and width of rectangle
+        //3. find difference between center of box and closest point
+        //4. distance of closest point = square root of (dot product(difference))
+        //5. get difference between two centers
+        //6. center_distance^2 = dot_product(difference of two centers)
+        //7. take sum of radius and closest point distance
+        //8. square sum total
+        //9. compare distance^2 <= sum^2
 
         Vector2 thisPos, otherPos;
         //move circle center into box's space by multiplying by its world transform inverse
