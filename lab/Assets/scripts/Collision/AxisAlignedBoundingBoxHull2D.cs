@@ -13,43 +13,9 @@ public class AxisAlignedBoundingBoxHull2D : CollisionHull2D
 
     private void Update()
     {
-        if (other.getTypeHull() == CollisionHullType2D.hull_obb)
-        {
-            if (TestCollisionVsOBB((ObjectBoundingBoxHull2D)other))
-            {
-                GetComponent<MeshRenderer>().material = green;
-            }
-            else
-            {
-                GetComponent<MeshRenderer>().material = red;
-            }
-
-        }
-        else if(other.getTypeHull() == CollisionHullType2D.hull_aabb)
-        {
-            if (TestCollisionVsAABB((AxisAlignedBoundingBoxHull2D)other))
-            {
-                GetComponent<MeshRenderer>().material = green;
-            }
-            else
-            {
-                GetComponent<MeshRenderer>().material = red;
-            }
-        }
-        else
-        {
-            if (TestCollisionVsCircle((CircleHull2D)other))
-            {
-                GetComponent<MeshRenderer>().material = green;
-            }
-            else
-            {
-                GetComponent<MeshRenderer>().material = red;
-            }
-        }
     }
 
-    public override bool TestCollisionVsCircle(CircleHull2D other)
+    public override bool TestCollisionVsCircle(CircleHull2D other, ref Collision c)
     {
         Vector2 thisPos, otherPos;
         thisPos = particle.position;
@@ -79,7 +45,7 @@ public class AxisAlignedBoundingBoxHull2D : CollisionHull2D
             return false;
     }
 
-    public override bool TestCollisionVsAABB(AxisAlignedBoundingBoxHull2D other)
+    public override bool TestCollisionVsAABB(AxisAlignedBoundingBoxHull2D other, ref Collision c)
     {
         //Check if maximum extent is greater than the others minimum extent FOR ALL AXIIS
         //1. create max extents of this and other particle
@@ -114,7 +80,7 @@ public class AxisAlignedBoundingBoxHull2D : CollisionHull2D
         }
     }
 
-    public override bool TestCollisionVsOBB(ObjectBoundingBoxHull2D other)
+    public override bool TestCollisionVsOBB(ObjectBoundingBoxHull2D other, ref Collision c)
     {
         //do a vs AABB test for both objects rotated in each others space
         //if both pass, then there is a collision, otherwise no

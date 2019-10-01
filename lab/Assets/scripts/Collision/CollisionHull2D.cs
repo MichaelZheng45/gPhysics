@@ -4,6 +4,23 @@ using UnityEngine;
 
 public abstract class CollisionHull2D : MonoBehaviour
 {
+    public class Collision
+    {
+        public struct Contact
+        {
+            Vector2 point;
+            Vector2 normal;
+            float restitution;
+        }
+
+        public CollisionHull2D a = null, b = null;
+        public Contact[] contact = new Contact[4];
+        public int contactCount = 0;
+        public bool status = false;
+
+        public Vector2 closingVelocity;
+    }
+
     public enum CollisionHullType2D
     {
         hull_circle,
@@ -30,7 +47,6 @@ public abstract class CollisionHull2D : MonoBehaviour
 
     public Material red;
     public Material green;
-    public CollisionHull2D other;
 
     void Start()
     {
@@ -39,52 +55,30 @@ public abstract class CollisionHull2D : MonoBehaviour
 
     private void Update()
     {
-        if(other.type == CollisionHullType2D.hull_obb)
-        {
-            if(TestCollisionVsOBB((ObjectBoundingBoxHull2D)other))
-            {
-                GetComponent<MeshRenderer>().material = green;
-            }
-            else
-            {
-                GetComponent<MeshRenderer>().material = red;
-            }
-        }
-        else if (other.type == CollisionHullType2D.hull_aabb)
-        {
-            if (TestCollisionVsAABB((AxisAlignedBoundingBoxHull2D)other))
-            {
-                GetComponent<MeshRenderer>().material = green;
-            }
-            else
-            {
-                GetComponent<MeshRenderer>().material = red;
-            }
-        }
-        else
-        {
-            if (TestCollisionVsCircle((CircleHull2D)other))
-            {
-                GetComponent<MeshRenderer>().material = green;
-            }
-            else
-            {
-                GetComponent<MeshRenderer>().material = red;
-            }
-        }
     }
 
-    public static bool TestCollision(CollisionHullType2D a, CollisionHullType2D b)
+    public static bool TestCollision(CollisionHull2D a, CollisionHull2D b, ref Collision c)
     {
-
-        return false;
+        if(b.type == CollisionHullType2D.hull_circle)
+        {
+            a.TestCollisionVsCircle((CircleHull2D)b,ref c);
+        }
+        else if(b.type == CollisionHullType2D.hull_aabb)
+        {
+            a.TestCollisionVsAABB((AxisAlignedBoundingBoxHull2D)b, ref c);
+        }
+        else if (b.type == CollisionHullType2D.hull_obb)
+        {
+            a.TestCollisionVsOBB((ObjectBoundingBoxHull2D)b, ref c);
+        }
+            return false;
     }
 
-    public abstract bool TestCollisionVsCircle(CircleHull2D other);
+    public abstract bool TestCollisionVsCircle(CircleHull2D other, ref Collision c);
 
-    public abstract bool TestCollisionVsAABB(AxisAlignedBoundingBoxHull2D other);
+    public abstract bool TestCollisionVsAABB(AxisAlignedBoundingBoxHull2D other, ref Collision c);
 
-    public abstract bool TestCollisionVsOBB(ObjectBoundingBoxHull2D other);
+    public abstract bool TestCollisionVsOBB(ObjectBoundingBoxHull2D other, ref Collision c);
 
     protected Vector2 rotatePoint(Vector2 point, float rotation)
     {

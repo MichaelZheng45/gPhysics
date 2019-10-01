@@ -13,44 +13,9 @@ public class ObjectBoundingBoxHull2D : CollisionHull2D
     // Update is called once per frame
     void Update()
     {
-        rotation = transform.eulerAngles.z;
-        if (other.getTypeHull() == CollisionHullType2D.hull_obb)
-        {
-            if (TestCollisionVsOBB((ObjectBoundingBoxHull2D)other))
-            {
-                GetComponent<MeshRenderer>().material = green;
-            }
-            else
-            {
-                GetComponent<MeshRenderer>().material = red;
-            }
-
-        }
-        else if (other.getTypeHull() == CollisionHullType2D.hull_aabb)
-        {
-            if (TestCollisionVsAABB((AxisAlignedBoundingBoxHull2D)other))
-            {
-                GetComponent<MeshRenderer>().material = green;
-            }
-            else
-            {
-                GetComponent<MeshRenderer>().material = red;
-            }
-        }
-        else
-        {
-            if (TestCollisionVsCircle((CircleHull2D)other))
-            {
-                GetComponent<MeshRenderer>().material = green;
-            }
-            else
-            {
-                GetComponent<MeshRenderer>().material = red;
-            }
-        }
     }
 
-    public override bool TestCollisionVsCircle(CircleHull2D other)
+    public override bool TestCollisionVsCircle(CircleHull2D other, ref Collision c)
     {
         Vector2 otherPos;
         //move circle center into box's space by multiplying by its world transform inverse
@@ -82,7 +47,7 @@ public class ObjectBoundingBoxHull2D : CollisionHull2D
             return false;
     }
 
-    public override bool TestCollisionVsAABB(AxisAlignedBoundingBoxHull2D other)
+    public override bool TestCollisionVsAABB(AxisAlignedBoundingBoxHull2D other, ref Collision c)
     {
         //do a vs AABB test for both objects rotated in each others space
         //if both pass, then there is a collision, otherwise no
@@ -172,7 +137,7 @@ public class ObjectBoundingBoxHull2D : CollisionHull2D
         return false;
     }
 
-    public override bool TestCollisionVsOBB(ObjectBoundingBoxHull2D other)
+    public override bool TestCollisionVsOBB(ObjectBoundingBoxHull2D other, ref Collision c)
     {
         //Transform this into others space and do AABB vs OBB
         //transform other into this space and do AABB vs OBB

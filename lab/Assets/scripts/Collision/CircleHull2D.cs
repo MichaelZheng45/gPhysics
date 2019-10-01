@@ -11,43 +11,9 @@ public class CircleHull2D : CollisionHull2D
 
     private void Update()
     {
-        if (other.getTypeHull() == CollisionHullType2D.hull_obb)
-        {
-            if (TestCollisionVsOBB((ObjectBoundingBoxHull2D)other))
-            {
-                GetComponent<MeshRenderer>().material = green;
-            }
-            else
-            {
-                GetComponent<MeshRenderer>().material = red;
-            }
-
-        }
-        else if (other.getTypeHull() == CollisionHullType2D.hull_aabb)
-        {
-            if (TestCollisionVsAABB((AxisAlignedBoundingBoxHull2D)other))
-            {
-                GetComponent<MeshRenderer>().material = green;
-            }
-            else
-            {
-                GetComponent<MeshRenderer>().material = red;
-            }
-        }
-        else
-        {
-            if (TestCollisionVsCircle((CircleHull2D)other))
-            {
-                GetComponent<MeshRenderer>().material = green;
-            }
-            else
-            {
-                GetComponent<MeshRenderer>().material = red;
-            }
-        }
     }
 
-    public override bool TestCollisionVsCircle(CircleHull2D other)
+    public override bool TestCollisionVsCircle(CircleHull2D other, ref Collision c)
     {
         //Collision passes if distance between them <= sumk of radii
         //optimzed collision if distance squared <= sum squared
@@ -73,7 +39,7 @@ public class CircleHull2D : CollisionHull2D
             return false;
     }
 
-    public override bool TestCollisionVsAABB(AxisAlignedBoundingBoxHull2D other)
+    public override bool TestCollisionVsAABB(AxisAlignedBoundingBoxHull2D other, ref Collision c)
     {
         //Collision Passes if closest point on box is within radius of circle
         //Calculate closest point on box by clamping center; closes point vs circle test
@@ -115,7 +81,7 @@ public class CircleHull2D : CollisionHull2D
             return false;
     }
            
-    public override bool TestCollisionVsOBB(ObjectBoundingBoxHull2D other)
+    public override bool TestCollisionVsOBB(ObjectBoundingBoxHull2D other, ref Collision c)
     {
         //same as aabb but first
         //1. find new position center of circle rotated around by multuplying by other's world transform inverse

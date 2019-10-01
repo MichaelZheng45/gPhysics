@@ -2442,7 +2442,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   red: {fileID: 2100000, guid: c75fdb712a8b4694eb48d74451728363, type: 2}
   green: {fileID: 2100000, guid: 542b11da99e23ed4aa9b2b9b316766ff, type: 2}
-  other: {fileID: 1750129960}
+  other: {fileID: 1554470422}
   height: 1
   length: 1
   rotation: 45
