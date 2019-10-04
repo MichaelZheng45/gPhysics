@@ -51,32 +51,8 @@ public class AxisAlignedBoundingBoxHull2D : CollisionHull2D
 
     public override bool TestCollisionVsCircle(CircleHull2D other)
     {
-        Vector2 thisPos, otherPos;
-        thisPos = particle.position;
-        otherPos = other.getParticle().position;
-
-        //find the closest point of on the rectangle to the circle
-        float newX = Mathf.Clamp(thisPos.x, otherPos.x - other.radius, otherPos.x + other.radius);
-        float newY = Mathf.Clamp(thisPos.y, otherPos.y - other.radius, otherPos.y + other.radius);
-        Vector2 closestPoint = new Vector2(newX, newY);
-
-        //act like it is now a circle, calculate "radius"
-        Vector2 rectangleDiff = otherPos - closestPoint;
-        float rectangleToClosest = Vector2.Dot(rectangleDiff, rectangleDiff);
-
-        //calculate distance between particles
-        Vector2 objDiff = thisPos - otherPos;
-        float particleDistance = Vector2.Dot(objDiff, objDiff);
-
-        //find the sum radii
-        float sumRadii = other.radius + Mathf.Sqrt(rectangleToClosest);
-        sumRadii *= sumRadii;
-
-        //compare
-        if (particleDistance <= sumRadii)
-            return true;
-        else
-            return false;
+        //call the other.testcollisionvs box(me)
+        return other.TestCollisionVsAABB(this);
     }
 
     public override bool TestCollisionVsAABB(AxisAlignedBoundingBoxHull2D other)
@@ -154,11 +130,14 @@ public class AxisAlignedBoundingBoxHull2D : CollisionHull2D
 
         //find max and min of other
         //get all corner points and then rotate it
-        p1 = rotatePoint(new Vector2(otherLength, otherHeight), other.rotation);
-        p2 = rotatePoint(new Vector2(otherLength, -otherHeight), other.rotation);
-        p3 = rotatePoint(new Vector2(-otherLength, -otherHeight), other.rotation);
-        p4 = rotatePoint(new Vector2(-otherLength, otherHeight), other.rotation);
-
+        //p1 = rotatePoint(new Vector2(otherLength, otherHeight), other.rotation);
+        //p2 = rotatePoint(new Vector2(otherLength, -otherHeight), other.rotation);
+        //p3 = rotatePoint(new Vector2(-otherLength, -otherHeight), other.rotation);
+        //p4 = rotatePoint(new Vector2(-otherLength, otherHeight), other.rotation);
+        p1 = other.transform.worldToLocalMatrix *( new Vector2(otherLength, otherHeight));
+        p2 = other.transform.worldToLocalMatrix *( new Vector2(otherLength, -otherHeight));
+        p3 = other.transform.worldToLocalMatrix *( new Vector2(-otherLength, -otherHeight));
+        p4 = other.transform.worldToLocalMatrix *( new Vector2(-otherLength, otherHeight));
         //find max of all points
         otherMax = new Vector2(Mathf.Max(p1.x, p2.x, p3.x, p4.x) + otherPosition.x, Mathf.Max(p1.y, p2.y, p3.y, p4.y) + otherPosition.y);
         otherMin = new Vector2(Mathf.Min(p1.x, p2.x, p3.x, p4.x) + otherPosition.x, Mathf.Min(p1.y, p2.y, p3.y, p4.y) + otherPosition.y);
@@ -172,16 +151,17 @@ public class AxisAlignedBoundingBoxHull2D : CollisionHull2D
         {
             check1 = false;
         }
-
+        Debug.Log("c1:" + check1);
         //for each corner, move it relative to the box then transform by the world matrix inverse. Finally add position back
-        p1 = other.transform.localToWorldMatrix.inverse * (new Vector2(particle.position.x + thisLength, particle.position.y + thisHeight) - otherPosition);
-        p2 = other.transform.localToWorldMatrix.inverse * (new Vector2(particle.position.x + thisLength, particle.position.y - thisHeight) - otherPosition);
-        p3 = other.transform.localToWorldMatrix.inverse * (new Vector2(particle.position.x - thisLength, particle.position.y - thisHeight) - otherPosition);
-        p4 = other.transform.localToWorldMatrix.inverse * (new Vector2(particle.position.x - thisLength, particle.position.y + thisHeight) - otherPosition);
+        p1 = other.transform.worldToLocalMatrix * (new Vector2(particle.position.x + thisLength, particle.position.y + thisHeight) - otherPosition); //this one
+        p2 = other.transform.worldToLocalMatrix * (new Vector2(particle.position.x + thisLength, particle.position.y - thisHeight) - otherPosition);
+        p3 = other.transform.worldToLocalMatrix * (new Vector2(particle.position.x - thisLength, particle.position.y - thisHeight) - otherPosition);
+        p4 = other.transform.worldToLocalMatrix * (new Vector2(particle.position.x - thisLength, particle.position.y + thisHeight) - otherPosition);
         p1 += otherPosition;
         p2 += otherPosition;
         p3 += otherPosition;
         p4 += otherPosition;
+
 
         //get the extremes for min and max
         thisMax = new Vector2(Mathf.Max(p1.x, p2.x, p3.x, p4.x), Mathf.Max(p1.y, p2.y, p3.y, p4.y));
@@ -198,6 +178,8 @@ public class AxisAlignedBoundingBoxHull2D : CollisionHull2D
         {
             check2 = false;
         }
+        Debug.Log("c2:" + check2);
+
         if (check1 && check2)
         {
             return true;

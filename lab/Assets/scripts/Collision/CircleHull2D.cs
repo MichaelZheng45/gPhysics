@@ -92,24 +92,15 @@ public class CircleHull2D : CollisionHull2D
         otherPos = other.getParticle().position;
 
         //find the closest point of on the rectangle to the circle
-        float newX = Mathf.Clamp(thisPos.x, otherPos.x - other.length / 2f, otherPos.x + other.length / 2f);
-        float newY = Mathf.Clamp(thisPos.y, otherPos.y - other.height / 2f, otherPos.y + other.height / 2f);
+        float newX = Mathf.Clamp(thisPos.x, otherPos.x - other.length * .5f, otherPos.x + other.length * .5f);
+        float newY = Mathf.Clamp(thisPos.y, otherPos.y - other.height * .5f, otherPos.y + other.height * .5f);
         Vector2 closestPoint = new Vector2(newX, newY);
 
         //act like it is now a circle, calculate "radius"
-        Vector2 rectangleDiff = otherPos - closestPoint;
-        float rectangleToClosest = Vector2.Dot(rectangleDiff, rectangleDiff);
-
-        //calculate distance between particles
-        Vector2 objDiff = thisPos - otherPos;
-        float particleDistance = Vector2.Dot(objDiff, objDiff);
-
-        //find the sum radii
-        float sumRadii = radius + Mathf.Sqrt(rectangleToClosest);
-        sumRadii *= sumRadii;
-
+        Vector2 closestToCircleDiff = thisPos - closestPoint;
+        float distance = Vector2.Dot(closestToCircleDiff, closestToCircleDiff);
         //compare
-        if (particleDistance <= sumRadii)
+        if (distance <= radius*radius)
             return true;
         else
             return false;
@@ -131,7 +122,7 @@ public class CircleHull2D : CollisionHull2D
         Vector2 otherPos;
         //move circle center into box's space by multiplying by its world transform inverse
         otherPos = other.getParticle().position;
-        Vector2 rotatedPos = other.transform.localToWorldMatrix.inverse * (particle.position - otherPos);
+        Vector2 rotatedPos = other.transform.worldToLocalMatrix * (particle.position - otherPos);
         rotatedPos += otherPos;
 
         //find the closest point of on the rectangle to the circle
