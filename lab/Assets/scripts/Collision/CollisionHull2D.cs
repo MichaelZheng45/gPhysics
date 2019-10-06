@@ -11,6 +11,13 @@ public abstract class CollisionHull2D : MonoBehaviour
             Vector2 point;
             Vector2 normal;
             float restitution;
+
+            public void setNew(Vector2 newPoint, Vector2 newNormal, float newRest)
+            {
+                point = newPoint;
+                normal = newNormal;
+                restitution = newRest;
+            }
         }
 
         public CollisionHull2D a = null, b = null;

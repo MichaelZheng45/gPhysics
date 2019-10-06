@@ -9,6 +9,8 @@ public class CircleHull2D : CollisionHull2D
     [Range(0f, 100f)]
     public float radius;
 
+
+    public CircleHull2D other;
     private void Update()
     {
     }
@@ -27,16 +29,35 @@ public class CircleHull2D : CollisionHull2D
         thisPos = particle.position;
         otherPos = other.particle.position;
 
-        Vector2 diff = thisPos - otherPos;
+        Vector2 diff = otherPos - thisPos;
         float distance = Vector2.Dot(diff, diff);
 
         float sumRadii = radius + other.radius;
         sumRadii *= sumRadii;
 
         if (distance <= sumRadii)
+        {
+            //set collision
+            c.a = this;
+            c.b = other;
+            c.status = true;
+            c.contactCount = 1;
+            //contact = position + (thisPos + (dirr.normal * ((length - r2) * .5f) + (r1 * .5f)) ) 
+            //Vector2 contact = thisPos + (diff.normalized * ((Mathf.Sqrt(distance) - other.radius) * .5f + (radius * .5f)));
+            //Vector contact = thisPos + (diff.normalized * (diff.magnitude * .5f));
+            Vector2 contact = thisPos + (diff.normalized * radius); //the point on the other circle's
+            Vector2 normal = diff.normalized;
+            //restitution 
+            c.contact[0].setNew(contact, normal, 1.0f); //do restitution currently set to 1
+
             return true;
+        }
+
         else
+        {
             return false;
+        }
+
     }
 
     public override bool TestCollisionVsAABB(AxisAlignedBoundingBoxHull2D other, ref Collision c)
@@ -76,9 +97,15 @@ public class CircleHull2D : CollisionHull2D
 
         //compare
         if (particleDistance <= sumRadii)
+        {
             return true;
+        }
+
         else
+        {
             return false;
+        }
+
     }
            
     public override bool TestCollisionVsOBB(ObjectBoundingBoxHull2D other, ref Collision c)
