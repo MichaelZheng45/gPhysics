@@ -39,7 +39,10 @@ public class particle2D : MonoBehaviour
     [SerializeField]
     forceMode f_mode = forceMode.FORCE_GRAVITY;
     [SerializeField]
-    InertiaTypes i_mode;
+    InertiaTypes i_mode = InertiaTypes.CIRCLE;
+
+    [Range(0f, 1f)]
+    public float elasticity;
 
     //Add user force
     public Slider playerSlider;
@@ -83,6 +86,11 @@ public class particle2D : MonoBehaviour
     public float getMass()
     {
         return mass;
+    }
+
+    public float getInverseMass()
+    {
+        return 1f / mass;
     }
 
     //force application lab 2 step 2

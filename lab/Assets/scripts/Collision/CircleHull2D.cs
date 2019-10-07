@@ -40,15 +40,24 @@ public class CircleHull2D : CollisionHull2D
             //set collision
             c.a = this;
             c.b = other;
-            c.status = true;
-            c.contactCount = 1;
+            //c.status = true;
+            c.contactCount += 1;
+            
             //contact = position + (thisPos + (dirr.normal * ((length - r2) * .5f) + (r1 * .5f)) ) 
             //Vector2 contact = thisPos + (diff.normalized * ((Mathf.Sqrt(distance) - other.radius) * .5f + (radius * .5f)));
             //Vector contact = thisPos + (diff.normalized * (diff.magnitude * .5f));
             Vector2 contact = thisPos + (diff.normalized * radius); //the point on the other circle's
             Vector2 normal = diff.normalized;
+
             //restitution 
-            c.contact[0].setNew(contact, normal, 1.0f); //do restitution currently set to 1
+             float restitution = Mathf.Max(c.a.getParticle().elasticity, c.b.getParticle().elasticity);
+
+            //Create contact
+            c.contact[0].setNew(contact, normal, restitution); //do restitution currently set to 1
+            
+            //Closing velocity equation from page 114 in book
+            c.closingVelocity = Vector2.Dot(c.a.getParticle().posVelocity, (c.b.getParticle().position - c.a.getParticle().position)) +
+               Vector2.Dot(c.b.getParticle().posVelocity, (c.a.getParticle().position - c.b.getParticle().position));
 
             return true;
         }
@@ -79,8 +88,8 @@ public class CircleHull2D : CollisionHull2D
         otherPos = other.getParticle().position;
 
         //find the closest point of on the rectangle to the circle
-        float newX = Mathf.Clamp(thisPos.x, otherPos.x - other.length / 2f, otherPos.x + other.length / 2f);
-        float newY = Mathf.Clamp(thisPos.y, otherPos.y - other.height / 2f, otherPos.y + other.height / 2f);
+        float newX = Mathf.Clamp(thisPos.x, otherPos.x - other.length * 0.5f, otherPos.x + other.length * 0.5f);
+        float newY = Mathf.Clamp(thisPos.y, otherPos.y - other.height * 0.5f, otherPos.y + other.height * 0.5f);
         Vector2 closestPoint = new Vector2(newX, newY);
 
         //act like it is now a circle, calculate "radius"

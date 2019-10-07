@@ -28,27 +28,25 @@ public class CollisionManager : MonoBehaviour
     void checkCollision(CollisionHull2D a, CollisionHull2D b)
     {
         CollisionHull2D.Collision col = new CollisionHull2D.Collision();
-        bool check = false;
         if(b.getTypeHull() == CollisionHull2D.CollisionHullType2D.hull_circle)
         {
-            check = a.TestCollisionVsCircle((CircleHull2D)b, ref col);
+            col.status = a.TestCollisionVsCircle((CircleHull2D)b, ref col);
         }
         else if(b.getTypeHull() == CollisionHull2D.CollisionHullType2D.hull_aabb)
         {
-            check = a.TestCollisionVsAABB((AxisAlignedBoundingBoxHull2D)b, ref col);
+            col.status = a.TestCollisionVsAABB((AxisAlignedBoundingBoxHull2D)b, ref col);
         }
         else
         {
-            check = a.TestCollisionVsOBB((ObjectBoundingBoxHull2D)b, ref col);
+            col.status = a.TestCollisionVsOBB((ObjectBoundingBoxHull2D)b, ref col);
         }
 
-        if(check) 
+        if(col.status) 
         {
             a.GetComponent<Renderer>().material = a.green;
-
-            //do collision resolve
+            //resolve collision
+            Debug.Log("Collision");
+            col.resolve();
         }
     }
-
-
 }

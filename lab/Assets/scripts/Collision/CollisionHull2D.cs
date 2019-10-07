@@ -18,6 +18,19 @@ public abstract class CollisionHull2D : MonoBehaviour
                 normal = newNormal;
                 restitution = newRest;
             }
+
+            public Vector2 GetNormal()
+            {
+                return normal;
+            }
+            public Vector2 GetPoint()
+            {
+                return point;
+            }
+            public float GetRestitution()
+            {
+                return restitution;
+            }
         }
 
         public CollisionHull2D a = null, b = null;
@@ -25,7 +38,66 @@ public abstract class CollisionHull2D : MonoBehaviour
         public int contactCount = 0;
         public bool status = false;
 
-        public Vector2 closingVelocity;
+        public float closingVelocity;
+
+        public void resolve()
+        {
+            //From book page 120
+            resolveVelocity();
+            resolveInterpenetration();
+        }
+
+        Vector2 calcSeparatingVelocity()
+        {
+            //From book page 120
+            Vector2 relativeVelocity = a.getParticle().posVelocity;
+
+            if (b != null)
+                relativeVelocity -= b.getParticle().posVelocity;
+            
+            return relativeVelocity * contact[0].GetNormal();
+        }
+
+        private void resolveVelocity() //Handles impulse calculations for this collision
+        {
+            //Follows psuedo code from book page 120-121
+
+            Vector2 separatingVelocity = calcSeparatingVelocity();
+            //May need to change
+            if(separatingVelocity.magnitude == 0)
+            {
+                //Contact is either separating or stationary
+                //No impulse is applied
+                Debug.Log("Stationary or separating collision from " + a.gameObject.name);
+                return;
+            }
+
+            Vector2 newSepVelocicity = -separatingVelocity * contact[0].GetRestitution();
+            Vector2 deltaVelocity = newSepVelocicity - separatingVelocity;
+
+            float totalInverseMass = a.getParticle().getInverseMass();
+            if (b != null)
+                totalInverseMass += b.getParticle().getInverseMass();
+
+            if (totalInverseMass <= 0) return;
+
+            //Impulse to apply
+            Vector2 impulse = deltaVelocity / totalInverseMass;
+
+            //amount of impulse per unit to apply
+            Vector2 impulsePerIMass = impulse * contact[0].GetNormal();
+
+            //Apply impulse to colliding bodies
+            a.getParticle().posVelocity += impulsePerIMass * a.getParticle().getInverseMass();
+
+            if (b != null)
+                b.getParticle().posVelocity += impulsePerIMass * -b.getParticle().getInverseMass();
+        }
+
+        private void resolveInterpenetration()
+        {
+            
+        }
     }
 
     public enum CollisionHullType2D
