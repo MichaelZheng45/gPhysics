@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class CollisionHull2D : MonoBehaviour
 {
@@ -11,12 +9,13 @@ public abstract class CollisionHull2D : MonoBehaviour
             Vector2 point;
             Vector2 normal;
             float restitution;
-
-            public void setNew(Vector2 newPoint, Vector2 newNormal, float newRest)
+            float penetration;
+            public void setNew(Vector2 newPoint, Vector2 newNormal, float newRest, float newPenetration)
             {
                 point = newPoint;
                 normal = newNormal;
                 restitution = newRest;
+                penetration = newPenetration;
             }
 
             public Vector2 GetNormal()
@@ -54,8 +53,9 @@ public abstract class CollisionHull2D : MonoBehaviour
 
             if (b != null)
                 relativeVelocity -= b.getParticle().posVelocity;
-            
-            return relativeVelocity * contact[0].GetNormal();
+
+             return relativeVelocity;    
+
         }
 
         private void resolveVelocity() //Handles impulse calculations for this collision
@@ -79,19 +79,21 @@ public abstract class CollisionHull2D : MonoBehaviour
             if (b != null)
                 totalInverseMass += b.getParticle().getInverseMass();
 
+  
             if (totalInverseMass <= 0) return;
 
             //Impulse to apply
             Vector2 impulse = deltaVelocity / totalInverseMass;
+            Debug.Log(deltaVelocity);
 
             //amount of impulse per unit to apply
-            Vector2 impulsePerIMass = impulse * contact[0].GetNormal();
+            Vector2 impulsePerIMass = impulse.magnitude * contact[0].GetNormal();
 
             //Apply impulse to colliding bodies
             a.getParticle().posVelocity += impulsePerIMass * a.getParticle().getInverseMass();
 
-            if (b != null)
-                b.getParticle().posVelocity += impulsePerIMass * -b.getParticle().getInverseMass();
+            //if (b != null)
+             //   b.getParticle().posVelocity += impulsePerIMass * -b.getParticle().getInverseMass();
         }
 
         private void resolveInterpenetration()

@@ -45,7 +45,6 @@ public class CollisionManager : MonoBehaviour
         {
             a.GetComponent<Renderer>().material = a.green;
             //resolve collision
-            Debug.Log("Collision");
             col.resolve();
         }
     }

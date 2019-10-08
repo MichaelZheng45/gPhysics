@@ -47,14 +47,15 @@ public class CircleHull2D : CollisionHull2D
             //Vector2 contact = thisPos + (diff.normalized * ((Mathf.Sqrt(distance) - other.radius) * .5f + (radius * .5f)));
             //Vector contact = thisPos + (diff.normalized * (diff.magnitude * .5f));
             Vector2 contact = thisPos + (diff.normalized * radius); //the point on the other circle's
-            Vector2 normal = diff.normalized;
+            Vector2 normal = (thisPos - otherPos).normalized;
 
             //restitution 
-             float restitution = Mathf.Max(c.a.getParticle().elasticity, c.b.getParticle().elasticity);
+            float restitution = Mathf.Max(c.a.getParticle().elasticity, c.b.getParticle().elasticity);
 
+            //penetration
+            float penetration = 1;
             //Create contact
-            c.contact[0].setNew(contact, normal, restitution); //do restitution currently set to 1
-            
+            c.contact[0].setNew(contact, normal, restitution, penetration); //do restitution currently set to 1
             //Closing velocity equation from page 114 in book
             c.closingVelocity = Vector2.Dot(c.a.getParticle().posVelocity, (c.b.getParticle().position - c.a.getParticle().position)) +
                Vector2.Dot(c.b.getParticle().posVelocity, (c.a.getParticle().position - c.b.getParticle().position));
