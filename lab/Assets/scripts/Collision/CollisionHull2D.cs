@@ -134,10 +134,6 @@ public abstract class CollisionHull2D : MonoBehaviour
         particle = GetComponent<particle2D>();
     }
 
-    private void Update()
-    {
-    }
-
     public static bool TestCollision(CollisionHull2D a, CollisionHull2D b, ref Collision c)
     {
         if(b.type == CollisionHullType2D.hull_circle)

@@ -9,8 +9,6 @@ public class CircleHull2D : CollisionHull2D
     [Range(0f, 100f)]
     public float radius;
 
-
-    public CircleHull2D other;
     private void Update()
     {
     }

@@ -37,15 +37,10 @@ public class particle2D : MonoBehaviour
     [SerializeField]
     positionUpdate positionMode= positionUpdate.POSITION_KINEMATIC;
     [SerializeField]
-    forceMode f_mode = forceMode.FORCE_GRAVITY;
-    [SerializeField]
     InertiaTypes i_mode = InertiaTypes.CIRCLE;
 
     [Range(0f, 1f)]
     public float elasticity;
-
-    //Add user force
-    public Slider playerSlider;
 
     //lab 2 step 1
     public float startingMass;
@@ -58,11 +53,15 @@ public class particle2D : MonoBehaviour
     Vector2 force;
 
     //Center of mass
-    Vector2 centOfMass = new Vector2(0.5f,0.5f);
+    public Vector2 centOfMass = new Vector2(0.5f,0.5f);
 
     //Rotational Force
     float inertia, inertiaInv;
     float torque;
+
+	//force bool activates
+	public bool isGravity = false;
+	public bool isDrag = false;
 
     public float getInertia()
     {
@@ -99,6 +98,13 @@ public class particle2D : MonoBehaviour
         //D'Alembert
         force += newForce;
     }
+
+	public void AddForceRot(float addRot)
+	{
+		Vector2 newForce = new Vector2(addRot,0);
+		float nForce = ForceGenerator.GenerateForce_Torque(newForce, centOfMass, new Vector2(centOfMass.x, centOfMass.y * 2));
+		AddTorque(nForce);
+	}
 
     public void AddTorque(float newTorque)
     {
@@ -167,95 +173,49 @@ public class particle2D : MonoBehaviour
         }
         setInertia(inertia);
 
-        //for testing friction
-        if (f_mode == forceMode.FORCE_F_KINETIC || f_mode == forceMode.FORCE_DRAG)
-        {
-            AddForce(new Vector2(500, 0)); 
-        }
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        float dt = Time.fixedDeltaTime;
+	// Update is called once per frame
+	void FixedUpdate()
+	{
+		float dt = Time.fixedDeltaTime;
 
-        switch (rotationMode)
-        {
-            case rotationUpdate.ROTATION_EULER_EXPLICIT:
-                updateRotationEulerExplicit(dt);
-                break;
-            case rotationUpdate.ROTATION_KINEMATIC:
-                updateRotationKinematic(dt);
-                break;
-        }
-        transform.rotation = Quaternion.Euler(0,0,rotation);
-        
-        switch(positionMode)
-        {
-            case positionUpdate.POSITION_EULER_EXPLICIT:
-                updatePositionEulerExplicit(dt);
-                break;
-            case positionUpdate.POSITION_KINEMATIC:
-                updatePositionKinematic(dt);
-                break;
-        }
-        transform.position = position;
+		switch (rotationMode)
+		{
+			case rotationUpdate.ROTATION_EULER_EXPLICIT:
+				updateRotationEulerExplicit(dt);
+				break;
+			case rotationUpdate.ROTATION_KINEMATIC:
+				updateRotationKinematic(dt);
+				break;
+		}
+		transform.rotation = Quaternion.Euler(0, 0, rotation);
 
-        //accelerationUpdate
-        updateAcceleration();
+		switch (positionMode)
+		{
+			case positionUpdate.POSITION_EULER_EXPLICIT:
+				updatePositionEulerExplicit(dt);
+				break;
+			case positionUpdate.POSITION_KINEMATIC:
+				updatePositionKinematic(dt);
+				break;
+		}
+		transform.position = position;
 
-        Vector2 p_force = new Vector2(playerSlider.value, 0);
-        Vector2 f_gravity = ForceGenerator.GenerateForce_Gravity(mass, -9.8f, Vector2.up);
-        Vector2 f_normal = ForceGenerator.GenerateForce_normal(f_gravity, transform.up);
-        Vector2 f_sliding = ForceGenerator.GenerateForce_sliding(f_gravity, f_normal);
-        Vector2 f_f_static = ForceGenerator.GenerateForce_friction_static(f_normal, p_force, coeff_static);
-        Vector2 f_f_kinetic = ForceGenerator.GenerateForce_friction_kinetic(f_normal, posVelocity, coeffc_kinetic);
-        Vector2 f_drag = ForceGenerator.GenerateForce_drag(posVelocity, new Vector2(5, 0), 1.225f, 1, 1.05f);
-        Vector2 f_spring = ForceGenerator.GenerateForce_spring(transform.position, Vector2.zero,.5f,1.5f);
-        switch (f_mode)
-        {
-            case forceMode.FORCE_USER:
-                AddForce(p_force);
-                break;
-            case forceMode.FORCE_GRAVITY:
-                AddForce(f_gravity);
-                break;
-            case forceMode.FORCE_NORMAL:
-                AddForce(f_normal);
-                break;
-            case forceMode.FORCE_SLIDING:
-                AddForce(f_sliding);
-                break;
-            case forceMode.FORCE_F_STATIC:
-                AddForce(p_force);
-                AddForce(f_f_static);
-                break;
-            case forceMode.FORCE_F_KINETIC:
-                AddForce(f_f_kinetic);
-                break;
-            case forceMode.FORCE_DRAG:
-                AddForce(f_drag);
-                break;
-            case forceMode.FORCE_SPRING:
-                AddForce(f_spring);
-                AddForce(f_gravity);
-                break;
+		//accelerationUpdate
+		updateAcceleration();
 
-        }
-    }
+		Vector2 f_gravity = ForceGenerator.GenerateForce_Gravity(mass, -9.8f, Vector2.up);
+		Vector2 f_normal = ForceGenerator.GenerateForce_normal(f_gravity, transform.up);
+		Vector2 f_sliding = ForceGenerator.GenerateForce_sliding(f_gravity, f_normal);
+		//Vector2 f_f_static = ForceGenerator.GenerateForce_friction_static(f_normal, p_force, coeff_static);
+		Vector2 f_f_kinetic = ForceGenerator.GenerateForce_friction_kinetic(f_normal, posVelocity, coeffc_kinetic);
+		Vector2 f_drag = ForceGenerator.GenerateForce_drag(posVelocity, Vector2.zero, 1.225f, 1, 5f);
+		Vector2 f_spring = ForceGenerator.GenerateForce_spring(transform.position, Vector2.zero, .5f, 1.5f);
 
-    public void resetData()
-    {
-       
-        transform.position *= 0;
-
-        position *= 0;
-        posVelocity = new Vector2(1, 0);
-        posAcceleration *= 0;
-
-        rotation = 0;
-        rotVelocity = 1;
-        rotAcceleration = 0;
-
-    }
+		if(isDrag)
+		{
+			AddForce(f_drag);
+		}
+	}
 }
