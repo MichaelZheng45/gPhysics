@@ -11,6 +11,10 @@ public class ShipHandler : MonoBehaviour
 	float currentHealth;
 
 	public CollisionManager colliderManager;
+
+    public GameObject bullet;
+    float bulletForce = 200;
+    float bulletSpawnOffset = 1.3f;
     void Start()
     {
 		currentHealth = maxHealth;
@@ -19,15 +23,32 @@ public class ShipHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(colliderManager.checkPlayerCollision())
-		{
-			currentHealth--;
-			healthbar.value = currentHealth;
-		}
+        checkCollision();
 
-		if (currentHealth <= 0)
-		{
+        if (currentHealth <= 0)
+        {
 
-		}
+        }
+    }
+
+    void checkCollision()
+    {
+        if (colliderManager.checkPlayerCollision())
+        {
+            currentHealth--;
+            healthbar.value = currentHealth;
+        }
+    }
+
+    public void FireWeapon()
+    {
+        GameObject newBullet = Instantiate(bullet, transform.position + (transform.up * bulletSpawnOffset), transform.rotation);
+        particle2D newBulletParticle = newBullet.GetComponent<particle2D>();
+        CollisionHull2D colliderHull2D = newBullet.GetComponent<CollisionHull2D>();
+
+        colliderHull2D.setParticle(newBulletParticle);
+        newBulletParticle.setBase(transform.position + (transform.up * bulletSpawnOffset), transform.rotation.eulerAngles.z);
+        newBulletParticle.AddForce(transform.up * bulletForce);
+        colliderManager.addNew(newBullet);
     }
 }

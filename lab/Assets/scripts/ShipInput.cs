@@ -5,12 +5,14 @@ using UnityEngine;
 public class ShipInput : MonoBehaviour
 {
 	particle2D mParticle;
+    ShipHandler shipController;
 	public float moveForce;
 	public float rotForce;
     // Start is called before the first frame update
     void Start()
     {
 		mParticle = GetComponent<particle2D>();
+        shipController = GetComponent<ShipHandler>();
     }
 
 	private void Update()
@@ -31,6 +33,10 @@ public class ShipInput : MonoBehaviour
 		{
 			rotateLeft();
 		}
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            shipController.FireWeapon();
+        }
 	}
 
 	public void moveUp()

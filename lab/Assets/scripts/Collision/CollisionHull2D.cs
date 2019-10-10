@@ -126,8 +126,10 @@ public abstract class CollisionHull2D : MonoBehaviour
         return particle;
     }
 
-    public Material red;
-    public Material green;
+    public void setParticle(particle2D newParticle)
+    {
+        particle = newParticle;
+    }
 
     void Start()
     {

@@ -218,4 +218,10 @@ public class particle2D : MonoBehaviour
 			AddForce(f_drag);
 		}
 	}
+
+    public void setBase(Vector2 nPosition, float nRotation)
+    {
+        rotation = nRotation;
+        position = nPosition;
+    }
 }

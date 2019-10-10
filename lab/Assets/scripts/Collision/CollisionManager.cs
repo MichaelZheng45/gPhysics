@@ -17,9 +17,11 @@ public class CollisionManager : MonoBehaviour
     {
         foreach(CollisionHull2D obj in allCollisionObj)
         {
+            checkCollision(obj, shipCollisionHull); //check player collision
+
             foreach (CollisionHull2D toCheck in allCollisionObj)
             {
-                if(obj != toCheck)
+                if(obj != toCheck && toCheck != null)
                     checkCollision(obj, toCheck);
             }
         }
@@ -61,5 +63,10 @@ public class CollisionManager : MonoBehaviour
 			return true;
         }
 		return false;
+    }
+
+    public void addNew(GameObject gameObj)
+    {
+        allCollisionObj.Add(gameObj.GetComponent<CollisionHull2D>());
     }
 }

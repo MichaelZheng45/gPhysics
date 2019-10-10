@@ -25,6 +25,7 @@ public class CircleHull2D : CollisionHull2D
         //6. compare distance^2 <= sum^2
         Vector2 thisPos, otherPos;
         thisPos = particle.position;
+
         otherPos = other.particle.position;
 
         Vector2 diff = otherPos - thisPos;
