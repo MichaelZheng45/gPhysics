@@ -5,6 +5,7 @@ using UnityEngine;
 public class CollisionManager : MonoBehaviour
 {
     public List<CollisionHull2D> allCollisionObj;
+	public CollisionHull2D shipCollisionHull;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,7 +17,6 @@ public class CollisionManager : MonoBehaviour
     {
         foreach(CollisionHull2D obj in allCollisionObj)
         {
-            obj.GetComponent<Renderer>().material = obj.red;
             foreach (CollisionHull2D toCheck in allCollisionObj)
             {
                 if(obj != toCheck)
@@ -25,7 +25,20 @@ public class CollisionManager : MonoBehaviour
         }
     }
 
-    void checkCollision(CollisionHull2D a, CollisionHull2D b)
+	public bool checkPlayerCollision()
+	{
+		bool notCollided = false;
+		foreach (CollisionHull2D toCheck in allCollisionObj)
+		{
+			if(checkCollision(shipCollisionHull, toCheck))
+			{
+				notCollided = true;
+			}
+		}
+		return notCollided;
+	}
+
+    bool checkCollision(CollisionHull2D a, CollisionHull2D b)
     {
         CollisionHull2D.Collision col = new CollisionHull2D.Collision();
         if(b.getTypeHull() == CollisionHull2D.CollisionHullType2D.hull_circle)
@@ -43,9 +56,10 @@ public class CollisionManager : MonoBehaviour
 
         if(col.status) 
         {
-            a.GetComponent<Renderer>().material = a.green;
             //resolve collision
             col.resolve();
+			return true;
         }
+		return false;
     }
 }
