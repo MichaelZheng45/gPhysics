@@ -16,7 +16,7 @@ public class AsteroidSpawner : MonoBehaviour
     [SerializeField]
     int NumberOfAsteroidsToSpawnPerTick;
 
-    Vector3 playerPos;
+    Vector2 playerPos;
     float spawnTimeReset;
 
     void Start()
@@ -48,12 +48,12 @@ public class AsteroidSpawner : MonoBehaviour
             float angle = Random.Range(0, 360);
             Vector2 spawnPos = new Vector2(Mathf.Sin(angle), Mathf.Cos(angle));
             spawnPos *= spawnRadius;
-            spawnPos += (Vector2)playerPos;
-            Vector2 velocity = Vector2.MoveTowards(spawnPos, playerPos, 1f);
+            spawnPos += playerPos;
+            Vector2 velocity = playerPos - spawnPos;
             GameObject asteroid = GameObject.Instantiate(chooseAsteroid(), spawnPos, Quaternion.identity);
             asteroid.GetComponent<particle2D>().setBase(spawnPos, 0);
-            asteroid.GetComponent<particle2D>().AddForce(velocity * asteroidSpeed);
-            
+            asteroid.GetComponent<particle2D>().AddForce(velocity.normalized * asteroidSpeed);
+            CollisionManager.Instance.addNew(asteroid);
         }
     }
 
