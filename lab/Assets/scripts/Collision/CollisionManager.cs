@@ -4,6 +4,20 @@ using UnityEngine;
 
 public class CollisionManager : MonoBehaviour
 {
+    public static CollisionManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Debug.Log("Multiple Instances of collision managers");
+        }
+    }
+
     public List<CollisionHull2D> allCollisionObj;
 	public CollisionHull2D shipCollisionHull;
     // Start is called before the first frame update
@@ -32,7 +46,7 @@ public class CollisionManager : MonoBehaviour
 		bool notCollided = false;
 		foreach (CollisionHull2D toCheck in allCollisionObj)
 		{
-			if(checkCollision(shipCollisionHull, toCheck))
+			if(checkCollision(shipCollisionHull, toCheck) && toCheck.getParticle().typeOfParticle == particleType.ASTEROID)
 			{
 				notCollided = true;
 			}
@@ -68,5 +82,10 @@ public class CollisionManager : MonoBehaviour
     public void addNew(GameObject gameObj)
     {
         allCollisionObj.Add(gameObj.GetComponent<CollisionHull2D>());
+    }
+
+    public void removeOld(CollisionHull2D gameObj)
+    {
+        allCollisionObj.Remove(gameObj);
     }
 }

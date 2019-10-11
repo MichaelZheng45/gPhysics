@@ -51,11 +51,11 @@ public class ShipInput : MonoBehaviour
 
 	public void rotateRight()
 	{
-		mParticle.AddForceRot(-rotForce);
+		mParticle.AddForceRot(rotForce); //pushing it right x
 	}
 
 	public void rotateLeft()
 	{
-		mParticle.AddForceRot(rotForce);
+		mParticle.AddForceRot(-rotForce); //pushing it left -x
 	}
 }
