@@ -34,3 +34,5 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+lab/Assets/Models/asteroid_1.fbx.meta
+*.meta
