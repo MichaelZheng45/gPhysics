@@ -15,20 +15,15 @@ public enum positionUpdate
     POSITION_KINEMATIC,
 }
 
-public enum forceMode
+public enum particleType
 {
-    FORCE_USER,
-    FORCE_GRAVITY,
-    FORCE_NORMAL,
-    FORCE_SLIDING,
-    FORCE_F_STATIC,
-    FORCE_F_KINETIC,
-    FORCE_DRAG,
-    FORCE_SPRING
+    ASTEROID,
+    SHIP,
+    BULLET
 }
 public class particle2D : MonoBehaviour
 {
-    //step 1
+    public particleType typeOfParticle;
     public Vector2 position, posVelocity, posAcceleration;
     public float rotation, rotVelocity, rotAcceleration;
 
@@ -210,7 +205,7 @@ public class particle2D : MonoBehaviour
 		Vector2 f_sliding = ForceGenerator.GenerateForce_sliding(f_gravity, f_normal);
 		//Vector2 f_f_static = ForceGenerator.GenerateForce_friction_static(f_normal, p_force, coeff_static);
 		Vector2 f_f_kinetic = ForceGenerator.GenerateForce_friction_kinetic(f_normal, posVelocity, coeffc_kinetic);
-		Vector2 f_drag = ForceGenerator.GenerateForce_drag(posVelocity, Vector2.zero, 1.225f, 1, 5f);
+		Vector2 f_drag = ForceGenerator.GenerateForce_drag(posVelocity, posVelocity * .5f, 1.225f, 1, 5f);
 		Vector2 f_spring = ForceGenerator.GenerateForce_spring(transform.position, Vector2.zero, .5f, 1.5f);
 
 		if(isDrag)

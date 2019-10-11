@@ -68,11 +68,10 @@ public abstract class CollisionHull2D : MonoBehaviour
             {
                 //Contact is either separating or stationary
                 //No impulse is applied
-                Debug.Log("Stationary or separating collision from " + a.gameObject.name);
                 return;
             }
 
-            Vector2 newSepVelocicity = -separatingVelocity * contact[0].GetRestitution();
+            Vector2 newSepVelocicity = separatingVelocity * contact[0].GetRestitution();
             Vector2 deltaVelocity = newSepVelocicity - separatingVelocity;
 
             float totalInverseMass = a.getParticle().getInverseMass();
@@ -84,7 +83,7 @@ public abstract class CollisionHull2D : MonoBehaviour
 
             //Impulse to apply
             Vector2 impulse = deltaVelocity / totalInverseMass;
-            Debug.Log(deltaVelocity);
+            Debug.Log(deltaVelocity.magnitude);
 
             //amount of impulse per unit to apply
             Vector2 impulsePerIMass = impulse.magnitude * contact[0].GetNormal();
