@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eac6743e4782d9d4ba5e1d267c77a804, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  typeOfParticle: 0
   position: {x: 0, y: 0}
   posVelocity: {x: 0, y: 0}
   posAcceleration: {x: 0, y: 0}

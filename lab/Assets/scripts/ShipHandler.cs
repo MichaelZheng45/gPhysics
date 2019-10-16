@@ -15,6 +15,9 @@ public class ShipHandler : MonoBehaviour
     public GameObject bullet;
     float bulletForce = 200;
     float bulletSpawnOffset = 1.3f;
+
+	public Text timer;
+	float currentTime = 0;
     void Start()
     {
 		currentHealth = maxHealth;
@@ -24,11 +27,16 @@ public class ShipHandler : MonoBehaviour
     void Update()
     {
         checkCollision();
-
+	
         if (currentHealth <= 0)
         {
-
+			timer.text = "You Are Dead";
         }
+		else
+		{
+			currentTime += Time.deltaTime;
+			timer.text = currentTime.ToString();
+		}
     }
 
     void checkCollision()

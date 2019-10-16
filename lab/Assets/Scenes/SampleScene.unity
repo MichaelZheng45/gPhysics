@@ -319,6 +319,7 @@ MonoBehaviour:
   healthbar: {fileID: 1206024669}
   colliderManager: {fileID: 26478230}
   bullet: {fileID: 5342164247734200440, guid: 521c701a64988684d95888e9777648e4, type: 3}
+  timer: {fileID: 1354933680}
 --- !u!1 &385463831
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,6 +375,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
@@ -703,6 +706,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
@@ -984,6 +989,7 @@ RectTransform:
   - {fileID: 385463832}
   - {fileID: 1282331504}
   - {fileID: 1632463236}
+  - {fileID: 1354933682}
   m_Father: {fileID: 620729171}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1042,6 +1048,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+    m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &1282331503
 GameObject:
   m_ObjectHideFlags: 0
@@ -1077,6 +1085,85 @@ RectTransform:
   m_AnchorMax: {x: 1, y: 0.75}
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1354933679
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1354933682}
+  - component: {fileID: 1354933681}
+  - component: {fileID: 1354933680}
+  m_Layer: 5
+  m_Name: time
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1354933680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1354933679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.8301887, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 30
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 3
+    m_MaxSize: 40
+    m_Alignment: 1
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: New Text
+--- !u!222 &1354933681
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1354933679}
+  m_CullTransparentMesh: 0
+--- !u!224 &1354933682
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1354933679}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1206024668}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 349, y: -10.060005}
+  m_SizeDelta: {x: 274, y: 37.62}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1359749676
 GameObject:
@@ -1133,6 +1220,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 0
   m_PreserveAspect: 0
@@ -1334,19 +1423,19 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2020306740}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef9575a1d3e3dbc4e85bc12978151783, type: 3}
+  m_Script: {fileID: 11500000, guid: e70901461439d3840878d853db290eb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   asteroids:
-  - {fileID: 5406840466693642887, guid: 535515b049f7d0a4cbb4131f7bb1f7d7, type: 3}
-  - {fileID: 1209365345747085442, guid: ccf53bad622702a4cb2669e24e13f213, type: 3}
-  - {fileID: 2279977942255692890, guid: 9a651e6493281a24098ee85f11304c6f, type: 3}
-  spawnTimer: 3
-  spawnRadius: 27.03
-  asteroidSpeed: 500
-  NumberOfAsteroidsToSpawnPerTick: 3
+  - {fileID: 1209365345747085442, guid: 96d91bc7fefdfe947978bb87cb749a82, type: 3}
+  - {fileID: 5406840466693642887, guid: 2bac55b45c03cd14a9782f48834b33d9, type: 3}
+  - {fileID: 2279977942255692890, guid: 397bfea8b69d2f54ea3c0aa9b8841f6f, type: 3}
+  spawnTimer: 2
+  spawnRadius: 0
+  asteroidSpeed: 0
+  NumberOfAsteroidsToSpawnPerTick: 1
 --- !u!4 &2020306742
 Transform:
   m_ObjectHideFlags: 0
