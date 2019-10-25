@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Quaternion4D 
 {
-    float w; 
-    float x;
-    float y;
-    float z;
+    public float w; 
+    public float x;
+    public float y;
+    public float z;
 
     public Quaternion4D(float w, float x, float y, float z)
     {
@@ -81,7 +81,22 @@ public class Quaternion4D
         return q;
     }
 
+    public static Quaternion4D addScaledVector(Quaternion4D quaternion ,Vector3 v, float scale)
+    {
+        Quaternion4D q = new Quaternion4D();
+        q.w = 0;
+        q.x = v.x * scale;
+        q.y = v.y * scale;
+        q.z = v.z * scale;
+        q = quaternionMult(q, quaternion);
 
+        q.w = quaternion.w + q.w * .5f;
+        q.x = quaternion.x + q.x * .5f;
+        q.y = quaternion.y + q.y * .5f;
+        q.z = quaternion.z + q.y * .5f;
+
+        return q;
+    }
 
     public static Quaternion4D operator *(Quaternion4D a, float b)
         => new Quaternion4D(a.w * b, a.x * b, a.y * b, a.z * b);

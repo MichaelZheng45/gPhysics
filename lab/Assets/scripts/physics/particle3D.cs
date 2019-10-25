@@ -7,7 +7,8 @@ public class particle3D : MonoBehaviour
 {
     public particleType typeOfParticle;
     public Vector3 position, posVelocity, posAcceleration;
-    public Vector3 rotation, rotVelocity, rotAcceleration;
+    public Vector3  rotVelocity, rotAcceleration;
+    public Quaternion4D rotation;
 
     [SerializeField]
     rotationUpdate rotationMode = rotationUpdate.ROTATION_KINEMATIC;
@@ -106,7 +107,7 @@ public class particle3D : MonoBehaviour
 
     void updateRotationEulerExplicit(float dt)
     {
-        rotation += rotVelocity * dt;
+        rotation = Quaternion4D.addScaledVector(rotation, rotVelocity, dt);
 
         rotVelocity += rotAcceleration * dt;
     }
@@ -158,7 +159,7 @@ public class particle3D : MonoBehaviour
                 updateRotationKinematic(dt);
                 break;
         }
-        transform.rotation = Quaternion.Euler(rotation);
+        transform.rotation = new Quaternion(rotation.x,rotation.y,rotation.z,rotation.w);
 
         switch (positionMode)
         {
@@ -175,7 +176,7 @@ public class particle3D : MonoBehaviour
         updateAcceleration();
     }
 
-    public void setBase(Vector3 nPosition, Vector3 nRotation)
+    public void setBase(Vector3 nPosition, Quaternion4D nRotation)
     {
         rotation = nRotation;
         position = nPosition;
