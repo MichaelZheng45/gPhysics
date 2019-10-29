@@ -15,13 +15,13 @@ public class InertiaGenerator
 {
     public static float GenerateInertia_Circle(float mass, float radius)
     {
-        float inertia = (mass * radius * radius) / 2f;
+        float inertia = (mass * radius * radius) * 0.5f;
         return inertia;
     }
 
     public static float GenerateInertia_Ring(float mass, float outerRadius, float innerRadius)
     {
-        float inertia = mass * ((outerRadius * outerRadius) + (innerRadius * innerRadius)) / 2f;
+        float inertia = mass * ((outerRadius * outerRadius) + (innerRadius * innerRadius)) * 0.5f;
         return inertia;
     }
 
@@ -34,7 +34,9 @@ public class InertiaGenerator
     public static float GenerateInertia_Ellipse(float mass, float length)
     {
         float inertia = (mass * length * length) / 12f;
+        
         return inertia;
+
     }
     
 }
