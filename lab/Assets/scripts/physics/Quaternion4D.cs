@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class Quaternion4D 
 {
     public float w; 
@@ -57,8 +58,8 @@ public class Quaternion4D
     {
         Quaternion4D newQ = new Quaternion4D();
         newQ.w = firstQ.w * secondQ.w - firstQ.x * secondQ.x - firstQ.y * secondQ.y - firstQ.z * secondQ.z;
-        newQ.x = firstQ.w * secondQ.x + firstQ.x * secondQ.w - firstQ.y * secondQ.z - firstQ.z * secondQ.y;
-        newQ.y = firstQ.w * secondQ.y - firstQ.x * secondQ.z + firstQ.y * secondQ.w - firstQ.z * secondQ.x;
+        newQ.x = firstQ.w * secondQ.x + firstQ.x * secondQ.w + firstQ.y * secondQ.z - firstQ.z * secondQ.y;
+        newQ.y = firstQ.w * secondQ.y - firstQ.x * secondQ.z + firstQ.y * secondQ.w + firstQ.z * secondQ.x;
         newQ.z = firstQ.w * secondQ.z + firstQ.x * secondQ.y - firstQ.y * secondQ.x + firstQ.z * secondQ.w;
         return newQ;
     }
@@ -84,18 +85,19 @@ public class Quaternion4D
     public static Quaternion4D addScaledVector(Quaternion4D quaternion ,Vector3 v, float scale)
     {
         Quaternion4D q = new Quaternion4D();
+        Quaternion4D outQ = new Quaternion4D();
         q.w = 0;
         q.x = v.x * scale;
         q.y = v.y * scale;
         q.z = v.z * scale;
         q = quaternionMult(q, quaternion);
 
-        q.w = quaternion.w + q.w * .5f;
-        q.x = quaternion.x + q.x * .5f;
-        q.y = quaternion.y + q.y * .5f;
-        q.z = quaternion.z + q.y * .5f;
+       outQ.w = quaternion.w + q.w * .5f;
+       outQ.x = quaternion.x + q.x * .5f;
+       outQ.y = quaternion.y + q.y * .5f;
+       outQ.z = quaternion.z + q.z * .5f;
 
-        return q;
+        return outQ;
     }
 
     public static Quaternion4D operator *(Quaternion4D a, float b)
@@ -121,5 +123,16 @@ public class Quaternion4D
         result.y = (num7 + num12) * b.x + (1f - (num4 + num6)) * b.y + (num9 - num10) * b.z;
         result.z = (num8 - num11) * b.x + (num9 + num10) * b.y + (1f - (num4 + num5)) * b.z;
         return result;
+    }
+
+    public static Matrix4x4 getTransformMatrix(Quaternion4D q, Vector3 position)
+    {
+        Matrix4x4 newTransform = new Matrix4x4(
+            new Vector4((q.w * q.w + q.x * q.x - q.y * q.y - q.z * q.z), 2 * (q.x * q.y + q.w * q.z), 2 * (q.x * q.z - q.w * q.y), 0),
+            new Vector4(2 * (q.x * q.y - q.w * q.z), (q.w * q.w - q.x * q.x + q.y * q.y - q.z * q.z), 2 * (q.y * q.z + q.w * q.x), 0),
+            new Vector4(2 * (q.x * q.z + q.w * q.y), 2 * (q.y * q.z - q.w * q.x), (q.w * q.w - q.x * q.x - q.y * q.y + q.z * q.z), 0),
+            new Vector4(position.x, position.y, position.z, 1));
+
+       return newTransform;
     }
 }

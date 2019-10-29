@@ -8,7 +8,7 @@ public class particle3D : MonoBehaviour
     public particleType typeOfParticle;
     public Vector3 position, posVelocity, posAcceleration;
     public Vector3  rotVelocity, rotAcceleration;
-    public Quaternion4D rotation;
+    Quaternion4D rotation;
 
     [SerializeField]
     rotationUpdate rotationMode = rotationUpdate.ROTATION_KINEMATIC;
@@ -114,13 +114,15 @@ public class particle3D : MonoBehaviour
 
     void updateRotationKinematic(float dt)
     {
-        rotation += rotVelocity * dt + (1 / 2) * rotAcceleration * (dt * dt);
+        //rotation += rotVelocity * dt + (1 / 2) * rotAcceleration * (dt * dt);
         rotVelocity += (rotAcceleration * dt);
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        Quaternion rot = transform.rotation;
+        rotation = new Quaternion4D(rot.w,rot.x,rot.y,rot.z);
         setMass(startingMass);
 
         switch (i_mode)
