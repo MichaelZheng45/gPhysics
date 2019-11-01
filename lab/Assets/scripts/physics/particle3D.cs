@@ -9,13 +9,14 @@ public class particle3D : MonoBehaviour
     public Vector3 position, posVelocity, posAcceleration;
     public Vector3  rotVelocity, rotAcceleration;
     Quaternion4D rotation;
+    Matrix4x4 worldTransformMatrix, worldTransformMatrixInv;
 
     [SerializeField]
     rotationUpdate rotationMode = rotationUpdate.ROTATION_KINEMATIC;
     [SerializeField]
     positionUpdate positionMode = positionUpdate.POSITION_KINEMATIC;
     [SerializeField]
-    InertiaTypes i_mode = InertiaTypes.CIRCLE;
+    InertiaTypes3D i_mode = InertiaTypes3D.BOX;
 
     [Range(0f, 1f)]
     public float elasticity;
@@ -31,25 +32,26 @@ public class particle3D : MonoBehaviour
     Vector3 force;
 
     //Center of mass
-    public Vector3 centOfMass = new Vector3(0.5f, 0.5f,0.5f);
+    public Vector3 centerOfMassLocal = new Vector3(0,0);
+    public Vector3 centerOfMassWorld;
 
     //Rotational Force
-    float inertia, inertiaInv;
+    Matrix4x4 inertiaLocal, inertiaWorld, inertiaInv;
     Vector3 torque;
 
     //force bool activates
     public bool isGravity = false;
     public bool isDrag = false;
 
-    public float getInertia()
+    public Matrix4x4 getInertia()
     {
-        return inertia;
+        return inertiaLocal;
     }
 
-    public void setInertia(float newInertia)
+    public void setInertia(Matrix4x4 newInertia)
     {
-        inertia = newInertia;
-        inertiaInv = inertia > 0.0f ? 1.0f / inertia : 0;
+        inertiaLocal = newInertia;
+       // inertiaInv = inertia > 0.0f ? 1.0f / inertia : 0;
     }
 
     public void setMass(float newMass)
@@ -89,7 +91,7 @@ public class particle3D : MonoBehaviour
         force.Set(0.0f, 0.0f, 0.0f);
 
         //torque
-        rotAcceleration = torque * inertiaInv;
+        rotAcceleration = inertiaInv * torque;
         torque = Vector3.zero; ;
     }
 
@@ -108,7 +110,6 @@ public class particle3D : MonoBehaviour
     void updateRotationEulerExplicit(float dt)
     {
         rotation = Quaternion4D.addScaledVector(rotation, rotVelocity, dt);
-
         rotVelocity += rotAcceleration * dt;
     }
 
@@ -127,23 +128,9 @@ public class particle3D : MonoBehaviour
 
         switch (i_mode)
         {
-            case InertiaTypes.RECTANGE:
-                inertia = InertiaGenerator.GenerateInertia_Rectangle(mass, centOfMass.x * 2, centOfMass.y * 2);
-                break;
 
-            case InertiaTypes.CIRCLE:
-                inertia = InertiaGenerator.GenerateInertia_Circle(mass, centOfMass.x);
-                break;
-
-            case InertiaTypes.RING:
-                inertia = InertiaGenerator.GenerateInertia_Ring(mass, centOfMass.x, 0.4f);
-                break;
-
-            case InertiaTypes.ROD:
-                inertia = InertiaGenerator.GenerateInertia_Rectangle(mass, centOfMass.x, centOfMass.y);
-                break;
         }
-        setInertia(inertia);
+        setInertia(inertiaLocal);
 
     }
 
@@ -151,7 +138,6 @@ public class particle3D : MonoBehaviour
     void FixedUpdate()
     {
         float dt = Time.fixedDeltaTime;
-
         switch (rotationMode)
         {
             case rotationUpdate.ROTATION_EULER_EXPLICIT:
@@ -173,6 +159,11 @@ public class particle3D : MonoBehaviour
                 break;
         }
         transform.position = position;
+
+        //update world data
+        worldTransformMatrix = Quaternion4D.getTransformMatrix(rotation, position);
+        centerOfMassWorld = centerOfMassLocal + position;
+
 
         //accelerationUpdate
         updateAcceleration();
