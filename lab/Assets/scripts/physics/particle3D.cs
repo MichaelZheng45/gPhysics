@@ -33,25 +33,24 @@ public class particle3D : MonoBehaviour
 
     //Center of mass
     public Vector3 centerOfMassLocal = new Vector3(0,0);
-    public Vector3 centerOfMassWorld;
+    Vector3 centerOfMassWorld;
 
     //Rotational Force
-    Matrix4x4 inertiaLocal, inertiaWorld, inertiaInv;
+    Matrix4x4 inertia, inertiaInv;
     Vector3 torque;
 
-    //force bool activates
-    public bool isGravity = false;
-    public bool isDrag = false;
+    [Tooltip("If you only need radius, do (radius, 0, 0)")]
+    public Vector3 size;
 
     public Matrix4x4 getInertia()
     {
-        return inertiaLocal;
+        return inertia;
     }
 
     public void setInertia(Matrix4x4 newInertia)
     {
-        inertiaLocal = newInertia;
-       // inertiaInv = inertia > 0.0f ? 1.0f / inertia : 0;
+        inertia = newInertia;
+        inertiaInv = newInertia.inverse;
     }
 
     public void setMass(float newMass)
@@ -91,7 +90,8 @@ public class particle3D : MonoBehaviour
         force.Set(0.0f, 0.0f, 0.0f);
 
         //torque
-        rotAcceleration = inertiaInv * torque;
+        Matrix4x4 rotMat = MatrixFunctions.getRotationMatrix(rotation);
+        rotAcceleration = (rotMat * inertiaInv * rotMat.inverse) * torque;
         torque = Vector3.zero; ;
     }
 
@@ -126,11 +126,25 @@ public class particle3D : MonoBehaviour
         rotation = new Quaternion4D(rot.w,rot.x,rot.y,rot.z);
         setMass(startingMass);
 
+        Matrix4x4 newInertia = Matrix4x4.identity;
         switch (i_mode)
         {
-
+            case InertiaTypes3D.SPHERE:
+                newInertia = InertiaGenerator3D.GenerateInertia_Sphere(mass,size.x);
+                break;
+            case InertiaTypes3D.HALLOW_SPHERE:
+                newInertia = InertiaGenerator3D.GenerateInertia_Hallow_Sphere(mass, size.x);
+                break;
+            case InertiaTypes3D.BOX:
+                newInertia = InertiaGenerator3D.GenerateInertia_Box(mass, size.x,size.y,size.z);
+                break;
+            case InertiaTypes3D.HALLOW_BOX:
+                newInertia = InertiaGenerator3D.GenerateInertia_Hallow_Box(mass, size.x, size.y, size.z);
+                break;
+            default:
+                break;
         }
-        setInertia(inertiaLocal);
+        setInertia(newInertia);
 
     }
 
@@ -161,9 +175,9 @@ public class particle3D : MonoBehaviour
         transform.position = position;
 
         //update world data
-        worldTransformMatrix = Quaternion4D.getTransformMatrix(rotation, position);
+        worldTransformMatrix = MatrixFunctions.getTransformMatrix(rotation, position);
+        worldTransformMatrixInv = MatrixFunctions.getTransformInverseMatrix(rotation, position);
         centerOfMassWorld = centerOfMassLocal + position;
-
 
         //accelerationUpdate
         updateAcceleration();

@@ -963,19 +963,15 @@ MonoBehaviour:
   position: {x: 0, y: 0, z: 0}
   posVelocity: {x: 0, y: 0, z: 0}
   posAcceleration: {x: 0, y: 0, z: 0}
-  rotVelocity: {x: 0, y: 1, z: 3}
+  rotVelocity: {x: 0, y: 0, z: 0}
   rotAcceleration: {x: 0, y: 0, z: 0}
-  rotation:
-    w: 0
-    x: 0
-    y: 0
-    z: 0
   rotationMode: 0
-  positionMode: 1
+  positionMode: 0
   i_mode: 0
   elasticity: 0
   startingMass: 0
-  centOfMass: {x: 0.5, y: 0.5, z: 0.5}
+  centerOfMassLocal: {x: 0, y: 0, z: 0}
+  centerOfMassWorld: {x: 0, y: 0, z: 0}
   isGravity: 0
   isDrag: 0
 --- !u!65 &1638442664

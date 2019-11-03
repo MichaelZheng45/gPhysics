@@ -125,14 +125,5 @@ public class Quaternion4D
         return result;
     }
 
-    public static Matrix4x4 getTransformMatrix(Quaternion4D q, Vector3 position)
-    {
-        Matrix4x4 newTransform = new Matrix4x4(
-            new Vector4((q.w * q.w + q.x * q.x - q.y * q.y - q.z * q.z), 2 * (q.x * q.y + q.w * q.z), 2 * (q.x * q.z - q.w * q.y), 0),
-            new Vector4(2 * (q.x * q.y - q.w * q.z), (q.w * q.w - q.x * q.x + q.y * q.y - q.z * q.z), 2 * (q.y * q.z + q.w * q.x), 0),
-            new Vector4(2 * (q.x * q.z + q.w * q.y), 2 * (q.y * q.z - q.w * q.x), (q.w * q.w - q.x * q.x - q.y * q.y + q.z * q.z), 0),
-            new Vector4(position.x, position.y, position.z, 1));
-
-       return newTransform;
-    }
+  
 }
