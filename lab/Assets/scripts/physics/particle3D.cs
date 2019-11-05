@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class particle3D : MonoBehaviour
 {
-    public particleType typeOfParticle;
+    //public particleType typeOfParticle;
     public Vector3 position, posVelocity, posAcceleration;
     public Vector3  rotVelocity, rotAcceleration;
     Quaternion4D rotation;
@@ -36,7 +36,7 @@ public class particle3D : MonoBehaviour
     Vector3 centerOfMassWorld;
 
     //Rotational Force
-    Matrix4x4 inertia, inertiaInv;
+    public Matrix4x4 inertia, inertiaInv;
     Vector3 torque;
 
     [Tooltip("If you only need radius, do (radius, 0, 0)")]
@@ -91,8 +91,9 @@ public class particle3D : MonoBehaviour
 
         //torque
         Matrix4x4 rotMat = MatrixFunctions.getRotationMatrix(rotation);
+        Debug.Log(torque);
         rotAcceleration = (rotMat * inertiaInv * rotMat.inverse) * torque;
-        torque = Vector3.zero; ;
+        torque = Vector3.zero;
     }
 
     //step 2
@@ -178,6 +179,26 @@ public class particle3D : MonoBehaviour
         worldTransformMatrix = MatrixFunctions.getTransformMatrix(rotation, position);
         worldTransformMatrixInv = MatrixFunctions.getTransformInverseMatrix(rotation, position);
         centerOfMassWorld = centerOfMassLocal + position;
+
+        Vector3 torqueToAdd = Vector3.zero;
+        if(Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            torqueToAdd = ForceGenerate3D.GenerateForce_Torque(Vector3.up * 2, position, Vector3.one);
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            torqueToAdd = ForceGenerate3D.GenerateForce_Torque(Vector3.down * 2, position, Vector3.one);
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            torqueToAdd = ForceGenerate3D.GenerateForce_Torque(Vector3.left * 2, position, Vector3.one);
+        }
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            torqueToAdd = ForceGenerate3D.GenerateForce_Torque(Vector3.right * 2, position, Vector3.one);
+        }
+
+        AddTorque(torqueToAdd);
 
         //accelerationUpdate
         updateAcceleration();
