@@ -21,7 +21,7 @@ public class InertiaGenerator3D
             column1,
             column2,
             column3,
-            Vector4.zero
+            new Vector4(0, 0, 0, 1)
             );
 
         return inertia;
@@ -36,7 +36,7 @@ public class InertiaGenerator3D
             column1,
             column2,
             column3,
-            Vector4.zero
+                new Vector4(0, 0, 0, 1)
             );
 
         return inertia;
@@ -51,7 +51,7 @@ public class InertiaGenerator3D
             column1,
             column2,
             column3,
-            Vector4.zero
+               new Vector4(0, 0, 0, 1)
             );
 
         return inertia;
@@ -66,7 +66,7 @@ public class InertiaGenerator3D
             column1,
             column2,
             column3,
-            Vector4.zero
+               new Vector4(0, 0, 0, 1)
             );
 
         return inertia;
