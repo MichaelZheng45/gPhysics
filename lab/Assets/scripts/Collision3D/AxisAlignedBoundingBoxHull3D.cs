@@ -8,8 +8,7 @@ public class AxisAlignedBoundingBoxHull3D : CollisionHull3D
     // Start is called before the first frame update
     public AxisAlignedBoundingBoxHull3D() : base(CollisionHullType3D.hull_aabb) { }
 
-    public float length, height;
-   
+    public float length, height, width;
 
     private void Update()
     {
@@ -17,32 +16,14 @@ public class AxisAlignedBoundingBoxHull3D : CollisionHull3D
 
     public override bool TestCollisionVsCircle(CircleHull3D other, ref Collision3D c)
     {
-        Vector2 thisPos, otherPos;
-        thisPos = particle.position;
-        otherPos = other.getParticle().position;
-
-        //find the closest point of on the rectangle to the circle
-        float newX = Mathf.Clamp(thisPos.x, otherPos.x - other.radius, otherPos.x + other.radius);
-        float newY = Mathf.Clamp(thisPos.y, otherPos.y - other.radius, otherPos.y + other.radius);
-        Vector2 closestPoint = new Vector2(newX, newY);
-
-        //act like it is now a circle, calculate "radius"
-        Vector2 rectangleDiff = otherPos - closestPoint;
-        float rectangleToClosest = Vector2.Dot(rectangleDiff, rectangleDiff);
-
-        //calculate distance between particles
-        Vector2 objDiff = thisPos - otherPos;
-        float particleDistance = Vector2.Dot(objDiff, objDiff);
-
-        //find the sum radii
-        float sumRadii = other.radius + Mathf.Sqrt(rectangleToClosest);
-        sumRadii *= sumRadii;
-
-        //compare
-        if (particleDistance <= sumRadii)
+        if(other.TestCollisionVsAABB(this,ref c))
+        {
             return true;
+        }
         else
+        {
             return false;
+        }
     }
 
     public override bool TestCollisionVsAABB(AxisAlignedBoundingBoxHull3D other, ref Collision3D c)
@@ -56,19 +37,21 @@ public class AxisAlignedBoundingBoxHull3D : CollisionHull3D
         //6. check if other_max.x > this_min.x and other_max.y > this_min.y
         //7. if both checks is true then it passes
 
-        Vector2 thisMax, thisMin, otherMax, otherMin;
+        Vector3 thisMax, thisMin, otherMax, otherMin;
         float thisLength = length * .5f;
         float thisHeight = height * .5f;
+        float thisWidth = width * .5f;
         float otherLength = other.length * .5f;
         float otherHeight = other.height * .5f;
+        float otherWidth = other.width * .5f;
 
-        thisMax = new Vector2(particle.position.x + thisLength, particle.position.y + thisHeight);
-        otherMax = new Vector2(other.particle.position.x + otherLength, other.particle.position.y + otherHeight);
-        thisMin = new Vector2(particle.position.x - thisLength, particle.position.y - thisHeight);
-        otherMin = new Vector2(other.particle.position.x - otherLength, other.particle.position.y - otherHeight);
+        thisMax = new Vector3(particle.position.x + thisLength, particle.position.y + thisHeight, particle.position.z + thisWidth);
+        otherMax = new Vector3(other.particle.position.x + otherLength, other.particle.position.y + otherHeight, other.particle.position.z + otherWidth);
+        thisMin = new Vector3(particle.position.x - thisLength, particle.position.y - thisHeight, particle.position.z - thisWidth);
+        otherMin = new Vector3(other.particle.position.x - otherLength, other.particle.position.y - otherHeight, other.particle.position.z - otherWidth);
 
-        bool check1 = (thisMax.x >= otherMin.x && thisMax.y >= otherMin.y);
-        bool check2 = (otherMax.x >= thisMin.x && otherMax.y >= thisMin.y);
+        bool check1 = (thisMax.x >= otherMin.x && thisMax.y >= otherMin.y && thisMax.z >= otherMin.z);
+        bool check2 = (otherMax.x >= thisMin.x && otherMax.y >= thisMin.y && otherMax.z >= thisMin.z);
 
         if(check1 && check2)
         {
@@ -105,18 +88,19 @@ public class AxisAlignedBoundingBoxHull3D : CollisionHull3D
         //9. if all checks are true, then collision check passes
 
         bool check1, check2;
-        Vector2 thisMax, thisMin, otherMax, otherMin;
-        Vector2 p1, p2, p3, p4;
+        Vector3 thisMax, thisMin, otherMax, otherMin;
+        Vector3 p1, p2, p3, p4;
 
-        Vector2 otherPosition = other.getParticle().position;
+        Vector3 otherPosition = other.getParticle().position;
         float thisLength = length * .5f;
         float thisHeight = height * .5f;
+        float thisWidth = width * .5f;
         float otherLength = other.length * .5f;
         float otherHeight = other.height * .5f;
-
+        float otherWidth = other.width * .5f;
         //max and min of this position
-        thisMax = new Vector2(particle.position.x + thisLength, particle.position.y + thisHeight);
-        thisMin = new Vector2(particle.position.x - thisLength, particle.position.y - thisHeight);
+        thisMax = new Vector3(particle.position.x + thisLength, particle.position.y + thisHeight, particle.position.z + thisWidth);
+        thisMin = new Vector3(particle.position.x - thisLength, particle.position.y - thisHeight);
 
         //find max and min of other
         //get all corner points and then rotate it
@@ -138,7 +122,7 @@ public class AxisAlignedBoundingBoxHull3D : CollisionHull3D
         {
             check1 = false;
         }
-
+        /*
         //for each corner, move it relative to the box then transform by the world matrix inverse. Finally add position back
         p1 = other.transform.localToWorldMatrix.inverse * (new Vector2(particle.position.x + thisLength, particle.position.y + thisHeight) - otherPosition);
         p2 = other.transform.localToWorldMatrix.inverse * (new Vector2(particle.position.x + thisLength, particle.position.y - thisHeight) - otherPosition);
@@ -148,7 +132,7 @@ public class AxisAlignedBoundingBoxHull3D : CollisionHull3D
         p2 += otherPosition;
         p3 += otherPosition;
         p4 += otherPosition;
-
+        */
         //get the extremes for min and max
         thisMax = new Vector2(Mathf.Max(p1.x, p2.x, p3.x, p4.x), Mathf.Max(p1.y, p2.y, p3.y, p4.y));
         thisMin = new Vector2(Mathf.Min(p1.x, p2.x, p3.x, p4.x), Mathf.Min(p1.y, p2.y, p3.y, p4.y));

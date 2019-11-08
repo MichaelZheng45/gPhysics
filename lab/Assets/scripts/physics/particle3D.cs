@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class particle3D : MonoBehaviour
 {
-    public particleType typeOfParticle;
     public Vector3 position, posVelocity, posAcceleration;
     public Vector3  rotVelocity, rotAcceleration;
     Quaternion4D rotation;
@@ -50,7 +49,7 @@ public class particle3D : MonoBehaviour
     public void setInertia(Matrix4x4 newInertia)
     {
         inertia = newInertia;
-        inertiaInv = newInertia.inverse;
+        inertiaInv = InertiaGenerator3D.GenerateInertiaInverse(inertia);
     }
 
     public void setMass(float newMass)
@@ -69,6 +68,16 @@ public class particle3D : MonoBehaviour
     public float getInverseMass()
     {
         return 1f / mass;
+    }
+
+    public Matrix4x4 getTransformMatrix()
+    {
+        return worldTransformMatrix;
+    }
+
+    public Matrix4x4 getTransformMatrixInv()
+    {
+        return worldTransformMatrixInv;
     }
 
     //force application lab 2 step 2

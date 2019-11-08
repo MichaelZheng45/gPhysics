@@ -12,7 +12,7 @@ public class AsteroidSpawner : MonoBehaviour
     [SerializeField]
     float spawnRadius;
     [SerializeField]
-    float asteroidSpeed;
+    float asteroidSpeed = 0;
     [SerializeField]
     int NumberOfAsteroidsToSpawnPerTick;
 
