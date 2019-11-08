@@ -7,7 +7,7 @@ public class ObjectBoundingBoxHull3D : CollisionHull3D
 
     public ObjectBoundingBoxHull3D() : base(CollisionHullType3D.hull_obb) { }
     
-    public float height, length, rotation;
+    public float height, length, width, rotation;
     // Start is called before the first frame update
 
     // Update is called once per frame

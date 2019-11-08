@@ -5,7 +5,7 @@ using UnityEngine;
 public class BulletTimer : MonoBehaviour
 {
     [SerializeField]
-    float bulletTime;
+    float bulletTime = 0;
     float currentTime = 0;
     // Start is called before the first frame update
     void Start()
