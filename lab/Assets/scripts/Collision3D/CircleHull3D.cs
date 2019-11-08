@@ -90,10 +90,11 @@ public class CircleHull3D : CollisionHull3D
         //find the closest point of on the rectangle to the circle
         float newX = Mathf.Clamp(thisPos.x, otherPos.x - other.length * 0.5f, otherPos.x + other.length * 0.5f);
         float newY = Mathf.Clamp(thisPos.y, otherPos.y - other.height * 0.5f, otherPos.y + other.height * 0.5f);
-        Vector3 closestPoint = new Vector3(newX, newY);
+        float newZ = Mathf.Clamp(thisPos.z, otherPos.z - other.width * 0.5f, otherPos.z + other.width * 0.5f);
+        Vector3 closestPoint = new Vector3(newX, newY, newZ);
 
         //act like it is now a circle, calculate "radius"
-        Vector2 rectangleDiff = otherPos - closestPoint;
+        Vector3 rectangleDiff = otherPos - closestPoint;
         float rectangleToClosest = Vector3.Dot(rectangleDiff, rectangleDiff);
 
         //calculate distance between particles
@@ -107,9 +108,9 @@ public class CircleHull3D : CollisionHull3D
         //compare
         if (particleDistance <= sumRadii)
         {
+            Debug.Log("Collision from " + gameObject.name);
             return true;
         }
-
         else
         {
             return false;
