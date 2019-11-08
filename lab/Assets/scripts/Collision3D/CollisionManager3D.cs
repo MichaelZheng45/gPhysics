@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CollisionManager3D : MonoBehaviour
 {
-    public static CollisionManager Instance { get; private set; }
+    public static CollisionManager3D Instance { get; private set; }
 
     private void Awake()
     {
@@ -46,7 +46,7 @@ public class CollisionManager3D : MonoBehaviour
 		bool notCollided = false;
 		foreach (CollisionHull3D toCheck in allCollisionObj)
 		{
-			if(checkCollision(shipCollisionHull, toCheck) && toCheck.getParticle().typeOfParticle == particleType.ASTEROID)
+			if(checkCollision(shipCollisionHull, toCheck))
 			{
 				notCollided = true;
 			}

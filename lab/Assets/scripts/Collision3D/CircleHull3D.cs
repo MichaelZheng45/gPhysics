@@ -23,13 +23,13 @@ public class CircleHull3D : CollisionHull3D
         //4. take sum of radii
         //5. square sum of radii
         //6. compare distance^2 <= sum^2
-        Vector2 thisPos, otherPos;
+        Vector3 thisPos, otherPos;
         thisPos = particle.position;
 
         otherPos = other.particle.position;
 
-        Vector2 diff = otherPos - thisPos;
-        float distance = Vector2.Dot(diff, diff);
+        Vector3 diff = otherPos - thisPos;
+        float distance = Vector3.Dot(diff, diff);
 
         float sumRadii = radius + other.radius;
         sumRadii *= sumRadii;
@@ -45,8 +45,8 @@ public class CircleHull3D : CollisionHull3D
             //contact = position + (thisPos + (dirr.normal * ((length - r2) * .5f) + (r1 * .5f)) ) 
             //Vector2 contact = thisPos + (diff.normalized * ((Mathf.Sqrt(distance) - other.radius) * .5f + (radius * .5f)));
             //Vector contact = thisPos + (diff.normalized * (diff.magnitude * .5f));
-            Vector2 contact = thisPos + (diff.normalized * radius); //the point on the other circle's
-            Vector2 normal = (thisPos - otherPos).normalized;
+            Vector3 contact = thisPos + (diff.normalized * radius); //the point on the other circle's
+            Vector3 normal = (thisPos - otherPos).normalized;
 
             //restitution 
             float restitution = Mathf.Max(c.a.getParticle().elasticity, c.b.getParticle().elasticity);
@@ -57,7 +57,7 @@ public class CircleHull3D : CollisionHull3D
             c.contact[0].setNew(contact, normal, restitution, penetration); //do restitution currently set to 1
             //Closing velocity equation from page 114 in book
             c.closingVelocity = Vector2.Dot(c.a.getParticle().posVelocity, (c.b.getParticle().position - c.a.getParticle().position)) +
-               Vector2.Dot(c.b.getParticle().posVelocity, (c.a.getParticle().position - c.b.getParticle().position));
+               Vector3.Dot(c.b.getParticle().posVelocity, (c.a.getParticle().position - c.b.getParticle().position));
 
             return true;
         }
@@ -83,22 +83,22 @@ public class CircleHull3D : CollisionHull3D
         //8. square sum total
         //9. compare distance^2 <= sum^2
 
-        Vector2 thisPos, otherPos;
+        Vector3 thisPos, otherPos;
         thisPos = particle.position;
         otherPos = other.getParticle().position;
 
         //find the closest point of on the rectangle to the circle
         float newX = Mathf.Clamp(thisPos.x, otherPos.x - other.length * 0.5f, otherPos.x + other.length * 0.5f);
         float newY = Mathf.Clamp(thisPos.y, otherPos.y - other.height * 0.5f, otherPos.y + other.height * 0.5f);
-        Vector2 closestPoint = new Vector2(newX, newY);
+        Vector3 closestPoint = new Vector3(newX, newY);
 
         //act like it is now a circle, calculate "radius"
         Vector2 rectangleDiff = otherPos - closestPoint;
-        float rectangleToClosest = Vector2.Dot(rectangleDiff, rectangleDiff);
+        float rectangleToClosest = Vector3.Dot(rectangleDiff, rectangleDiff);
 
         //calculate distance between particles
-        Vector2 objDiff = thisPos - otherPos;
-        float particleDistance = Vector2.Dot(objDiff, objDiff);
+        Vector3 objDiff = thisPos - otherPos;
+        float particleDistance = Vector3.Dot(objDiff, objDiff);
 
         //find the sum radii
         float sumRadii = radius + Mathf.Sqrt(rectangleToClosest);
@@ -143,11 +143,11 @@ public class CircleHull3D : CollisionHull3D
 
         //act like it is now a circle, calculate "radius"
         Vector3 rectangleDiff = otherPos - closestPoint;
-        float rectangleToClosest = Vector2.Dot(rectangleDiff, rectangleDiff);
+        float rectangleToClosest = Vector3.Dot(rectangleDiff, rectangleDiff);
 
         //calculate distance between particles
         Vector2 objDiff = rotatedPos - otherPos;
-        float particleDistance = Vector2.Dot(objDiff, objDiff);
+        float particleDistance = Vector3.Dot(objDiff, objDiff);
 
         //find the sum radii
         float sumRadii = radius + Mathf.Sqrt(rectangleToClosest);

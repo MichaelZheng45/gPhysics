@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class particle3D : MonoBehaviour
 {
-    //public particleType typeOfParticle;
+    public particleType typeOfParticle;
     public Vector3 position, posVelocity, posAcceleration;
     public Vector3  rotVelocity, rotAcceleration;
     Quaternion4D rotation;
