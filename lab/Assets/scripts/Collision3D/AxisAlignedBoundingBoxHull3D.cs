@@ -89,7 +89,7 @@ public class AxisAlignedBoundingBoxHull3D : CollisionHull3D
 
         bool check1, check2;
         Vector3 thisMax, thisMin, otherMax, otherMin;
-        Vector3 p1, p2, p3, p4;
+        Vector3 p1, p2, p3, p4, p5, p6, p7, p8;
 
         Vector3 otherPosition = other.getParticle().position;
         float thisLength = length * .5f;
@@ -100,21 +100,25 @@ public class AxisAlignedBoundingBoxHull3D : CollisionHull3D
         float otherWidth = other.width * .5f;
         //max and min of this position
         thisMax = new Vector3(particle.position.x + thisLength, particle.position.y + thisHeight, particle.position.z + thisWidth);
-        thisMin = new Vector3(particle.position.x - thisLength, particle.position.y - thisHeight);
+        thisMin = new Vector3(particle.position.x - thisLength, particle.position.y - thisHeight, particle.position.z - thisWidth);
 
         //find max and min of other
         //get all corner points and then rotate it
-        p1 = rotatePoint(new Vector2(otherLength, otherHeight), other.rotation);
-        p2 = rotatePoint(new Vector2(otherLength, -otherHeight), other.rotation);
-        p3 = rotatePoint(new Vector2(-otherLength, -otherHeight), other.rotation);
-        p4 = rotatePoint(new Vector2(-otherLength, otherHeight), other.rotation);
+        p1 = particle.getTransformMatrixInv() * new Vector3(otherLength, otherHeight, otherWidth);
+        p2 = particle.getTransformMatrixInv() * new Vector3(otherLength, otherHeight, -otherWidth);
+        p3 = particle.getTransformMatrixInv() * new Vector3(otherLength, -otherHeight, otherWidth);
+        p4 = particle.getTransformMatrixInv() * new Vector3(otherLength, -otherHeight, -otherWidth);
+        p5 = particle.getTransformMatrixInv() * new Vector3(-otherLength, otherHeight, otherWidth);
+        p6 = particle.getTransformMatrixInv() * new Vector3(-otherLength, otherHeight, -otherWidth);
+        p7 = particle.getTransformMatrixInv() * new Vector3(-otherLength, -otherHeight, otherWidth);
+        p8 = particle.getTransformMatrixInv() * new Vector3(-otherLength, -otherHeight, -otherWidth);
 
         //find max of all points
-        otherMax = new Vector2(Mathf.Max(p1.x, p2.x, p3.x, p4.x) + otherPosition.x, Mathf.Max(p1.y, p2.y, p3.y, p4.y) + otherPosition.y);
-        otherMin = new Vector2(Mathf.Min(p1.x, p2.x, p3.x, p4.x) + otherPosition.x, Mathf.Min(p1.y, p2.y, p3.y, p4.y) + otherPosition.y);
+        otherMax = new Vector3(Mathf.Max(p1.x, p2.x, p3.x, p4.x, p5.x, p6.x, p7.x, p8.x) + otherPosition.x, Mathf.Max(p1.y, p2.y, p3.y, p4.y, p5.y, p6.y, p7.y, p8.y) + otherPosition.y, Mathf.Max(p1.z, p2.z, p3.z, p4.z, p5.z, p6.z, p7.z, p8.z) + otherPosition.z);
+        otherMin = new Vector3(Mathf.Min(p1.x, p2.x, p3.x, p4.x, p5.x, p6.x, p7.x, p8.x) + otherPosition.x, Mathf.Min(p1.y, p2.y, p3.y, p4.y, p5.y, p6.y, p7.y, p8.y) + otherPosition.y, Mathf.Min(p1.z, p2.z, p3.z, p4.z, p5.z, p6.z, p7.z, p8.z) + otherPosition.z);
 
         //do check
-        if ((thisMax.x >= otherMin.x && thisMax.y >= otherMin.y) && (otherMax.x >= thisMin.x && otherMax.y >= thisMin.y))
+        if ((thisMax.x >= otherMin.x && thisMax.y >= otherMin.y && thisMax.z >= otherMin.z) && (otherMax.x >= thisMin.x && otherMax.y >= thisMin.y && otherMax.z >= thisMin.z))
         {
             check1 = true;
         }
@@ -122,7 +126,7 @@ public class AxisAlignedBoundingBoxHull3D : CollisionHull3D
         {
             check1 = false;
         }
-        /*
+        
         //for each corner, move it relative to the box then transform by the world matrix inverse. Finally add position back
         p1 = other.transform.localToWorldMatrix.inverse * (new Vector2(particle.position.x + thisLength, particle.position.y + thisHeight) - otherPosition);
         p2 = other.transform.localToWorldMatrix.inverse * (new Vector2(particle.position.x + thisLength, particle.position.y - thisHeight) - otherPosition);
@@ -132,7 +136,7 @@ public class AxisAlignedBoundingBoxHull3D : CollisionHull3D
         p2 += otherPosition;
         p3 += otherPosition;
         p4 += otherPosition;
-        */
+        
         //get the extremes for min and max
         thisMax = new Vector2(Mathf.Max(p1.x, p2.x, p3.x, p4.x), Mathf.Max(p1.y, p2.y, p3.y, p4.y));
         thisMin = new Vector2(Mathf.Min(p1.x, p2.x, p3.x, p4.x), Mathf.Min(p1.y, p2.y, p3.y, p4.y));

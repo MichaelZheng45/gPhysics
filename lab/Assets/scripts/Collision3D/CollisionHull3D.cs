@@ -157,16 +157,4 @@ public abstract class CollisionHull3D : MonoBehaviour
     public abstract bool TestCollisionVsAABB(AxisAlignedBoundingBoxHull3D other, ref Collision3D c);
 
     public abstract bool TestCollisionVsOBB(ObjectBoundingBoxHull3D other, ref Collision3D c);
-
-    protected Vector3 rotatePoint(Vector3 point, float rotation)
-    {
-        //http://polymathprogrammer.com/2008/09/01/cartesian-coordinates-and-transformation-matrices/
-        //[cos(0)  -sin(0)]  [x]  = xCos(0) - ySin(0)
-        //[sin(0)  cos(0)]   [y] = xSin(0) + yCos(0)
-        float rad = rotation * Mathf.Deg2Rad;
-        float x = point.x * Mathf.Cos(rad) - (point.y * Mathf.Sin(rad));
-        float y = point.x * Mathf.Sin(rad) + point.y * Mathf.Cos(rad);
-
-        return new Vector3(x, y);
-    }
 }
