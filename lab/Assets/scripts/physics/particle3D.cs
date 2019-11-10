@@ -101,7 +101,7 @@ public class particle3D : MonoBehaviour
         //torque
         Matrix4x4 rotMat = MatrixFunctions.getRotationMatrix(rotation);
         Debug.Log(torque);
-        rotAcceleration = (rotMat * inertiaInv * rotMat.inverse) * torque;
+        rotAcceleration = (rotMat * inertiaInv * MatrixFunctions.getInverseRotationMatrix(rotMat)) * torque;
         torque = Vector3.zero;
     }
 

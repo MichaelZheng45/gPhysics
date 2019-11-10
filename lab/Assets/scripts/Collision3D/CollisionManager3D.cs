@@ -19,7 +19,9 @@ public class CollisionManager3D : MonoBehaviour
     }
 
     public List<CollisionHull3D> allCollisionObj;
-	public CollisionHull3D shipCollisionHull;
+
+	public Material red;
+	public Material Green;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,28 +33,13 @@ public class CollisionManager3D : MonoBehaviour
     {
         foreach(CollisionHull3D obj in allCollisionObj)
         {
-            checkCollision(obj, shipCollisionHull); //check player collision
-
             foreach (CollisionHull3D toCheck in allCollisionObj)
             {
-                if(obj != toCheck && toCheck != null)
+                if(obj != toCheck && toCheck != null && obj != toCheck)
                     checkCollision(obj, toCheck);
             }
         }
     }
-
-	public bool checkPlayerCollision()
-	{
-		bool notCollided = false;
-		foreach (CollisionHull3D toCheck in allCollisionObj)
-		{
-			if(checkCollision(shipCollisionHull, toCheck))
-			{
-				notCollided = true;
-			}
-		}
-		return notCollided;
-	}
 
     bool checkCollision(CollisionHull3D a, CollisionHull3D b)
     {
@@ -72,10 +59,12 @@ public class CollisionManager3D : MonoBehaviour
 
         if(col.status) 
         {
+			a.gameObject.GetComponent<MeshRenderer>().material = Green;
             //resolve collision
-            col.resolve();
+           // col.resolve();
 			return true;
         }
+		a.gameObject.GetComponent<MeshRenderer>().material = red;
 		return false;
     }
 
