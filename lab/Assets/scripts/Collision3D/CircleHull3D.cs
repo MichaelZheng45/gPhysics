@@ -136,6 +136,7 @@ public class CircleHull3D : CollisionHull3D
         otherPos = other.getParticle().position;
         Vector3 rotatedPos = other.transform.localToWorldMatrix.inverse * (particle.position - otherPos);
         rotatedPos += otherPos;
+        /*
 
         //find the closest point of on the rectangle to the circle
         float newX = Mathf.Clamp(rotatedPos.x, otherPos.x - other.length * .5f, otherPos.x + other.length * .5f);
@@ -157,7 +158,7 @@ public class CircleHull3D : CollisionHull3D
         //compare
         if (particleDistance <= sumRadii)
             return true;
-        else
+        else */
             return false;
     }
 }

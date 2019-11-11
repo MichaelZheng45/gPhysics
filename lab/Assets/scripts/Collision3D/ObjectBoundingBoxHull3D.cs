@@ -7,7 +7,6 @@ public class ObjectBoundingBoxHull3D : CollisionHull3D
 
     public ObjectBoundingBoxHull3D() : base(CollisionHullType3D.hull_obb) { }
 
-	public float height, length, width;
     // Start is called before the first frame update
 
     // Update is called once per frame
@@ -71,14 +70,14 @@ public class ObjectBoundingBoxHull3D : CollisionHull3D
         bool check1, check2;
         Vector2 thisMax, thisMin, otherMax, otherMin;
         Vector3 p1, p2, p3, p4;
-
+        /*
         Vector3 otherPosition = other.getParticle().position;
         float thisLength = length * .5f;
         float thisHeight = height * .5f;
         float otherLength = other.length * .5f;
         float otherHeight = other.height * .5f;
 
-		/*
+		
         //get all corner points and then rotate it
         p1 = rotatePoint(new Vector2(thisLength, thisHeight), rotation) + particle.position;
         p2 = rotatePoint(new Vector2(thisLength, -thisHeight), rotation) + particle.position;
