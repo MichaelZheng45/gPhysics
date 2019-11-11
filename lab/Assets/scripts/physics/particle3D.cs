@@ -35,8 +35,8 @@ public class particle3D : MonoBehaviour
     Vector3 centerOfMassWorld;
 
     //Rotational Force
-    public Matrix4x4 inertia, inertiaInv;
-    Vector3 torque;
+    Matrix4x4 inertia, inertiaInv;
+    public Vector3 torque;
 
     [Tooltip("If you only need radius, do (radius, 0, 0)")]
     public Vector3 size;
@@ -92,16 +92,17 @@ public class particle3D : MonoBehaviour
         torque += newTorque;
     }
 
-    void updateAcceleration()
+	void updateAcceleration()
     {
         //newtons 2nd law
         posAcceleration = force * massInv;
         force.Set(0.0f, 0.0f, 0.0f);
 
         //torque
-        Matrix4x4 rotMat = MatrixFunctions.getRotationMatrix(rotation);
-        Debug.Log(torque);
-        rotAcceleration = (rotMat * inertiaInv * MatrixFunctions.getInverseRotationMatrix(rotMat)) * torque;
+		Matrix4x4 rotMat = MatrixFunctions.getRotationMatrix(rotation);
+		Matrix4x4 rotMatInv = MatrixFunctions.getInverseRotationMatrix(rotMat);
+
+		rotAcceleration = (rotMat * inertiaInv * rotMatInv )* torque;
         torque = Vector3.zero;
     }
 
@@ -206,9 +207,7 @@ public class particle3D : MonoBehaviour
         {
             torqueToAdd = ForceGenerate3D.GenerateForce_Torque(Vector3.right * 2, position, Vector3.one);
         }
-
-        AddTorque(torqueToAdd);
-
+		AddTorque(torqueToAdd);
         //accelerationUpdate
         updateAcceleration();
     }
