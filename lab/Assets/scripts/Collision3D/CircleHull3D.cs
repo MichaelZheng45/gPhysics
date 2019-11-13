@@ -87,10 +87,14 @@ public class CircleHull3D : CollisionHull3D
         thisPos = particle.position;
         otherPos = other.getParticle().position;
 
-        //find the closest point of on the rectangle to the circle
-        float newX = Mathf.Clamp(thisPos.x, otherPos.x - other.length * 0.5f, otherPos.x + other.length * 0.5f);
-        float newY = Mathf.Clamp(thisPos.y, otherPos.y - other.height * 0.5f, otherPos.y + other.height * 0.5f);
-        float newZ = Mathf.Clamp(thisPos.z, otherPos.z - other.width * 0.5f, otherPos.z + other.width * 0.5f);
+		float otherLength = other.getParticle().size.x * .5f;
+		float otherHeight = other.getParticle().size.y * .5f;
+		float otherWidth = other.getParticle().size.z * .5f;
+
+		//find the closest point of on the rectangle to the circle
+		float newX = Mathf.Clamp(thisPos.x, otherPos.x - otherLength * 0.5f, otherPos.x + otherLength * 0.5f);
+        float newY = Mathf.Clamp(thisPos.y, otherPos.y - otherHeight * 0.5f, otherPos.y + otherHeight * 0.5f);
+        float newZ = Mathf.Clamp(thisPos.z, otherPos.z - otherWidth * 0.5f, otherPos.z + otherWidth * 0.5f);
         Vector3 closestPoint = new Vector3(newX, newY, newZ);
 
         //act like it is now a circle, calculate "radius"

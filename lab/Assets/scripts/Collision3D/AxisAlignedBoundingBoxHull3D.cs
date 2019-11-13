@@ -8,8 +8,6 @@ public class AxisAlignedBoundingBoxHull3D : CollisionHull3D
     // Start is called before the first frame update
     public AxisAlignedBoundingBoxHull3D() : base(CollisionHullType3D.hull_aabb) { }
 
-    public float length, height, width;
-
     private void Update()
     {
     }
@@ -63,7 +61,6 @@ public class AxisAlignedBoundingBoxHull3D : CollisionHull3D
         }
     }
 
-	public bool check1, check2;
 	public override bool TestCollisionVsOBB(ObjectBoundingBoxHull3D other, ref Collision3D c)
     {
         //do a vs AABB test for both objects rotated in each others space
@@ -91,8 +88,9 @@ public class AxisAlignedBoundingBoxHull3D : CollisionHull3D
 
         Vector3 thisMax, thisMin, otherMax, otherMin;
         Vector3 p1, p2, p3, p4, p5, p6, p7, p8;
+		bool check1, check2;
 
-        Vector3 otherPosition = other.getParticle().position;
+		Vector3 otherPosition = other.getParticle().position;
 		float thisLength = particle.size.x * .5f;
 		float thisHeight = particle.size.y * .5f;
 		float thisWidth = particle.size.z * .5f;
