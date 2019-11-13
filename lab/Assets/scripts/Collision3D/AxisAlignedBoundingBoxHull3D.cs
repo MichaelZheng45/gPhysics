@@ -141,11 +141,7 @@ public class AxisAlignedBoundingBoxHull3D : CollisionHull3D
 
 		otherMax = otherPosition + new Vector3(otherLength,otherHeight, otherWidth);
         otherMin = otherPosition + new Vector3(- otherLength,- otherHeight, - otherWidth);
-		Debug.Log("s");
-		Debug.Log(thisMax);
-		Debug.Log(otherMax);
-		Debug.Log(thisMin);
-		Debug.Log(otherMin);
+
 		if ((thisMax.x >= otherMin.x && thisMax.y >= otherMin.y && thisMax.z >= otherMin.z) && (otherMax.x >= thisMin.x && otherMax.y >= thisMin.y && otherMax.z >= thisMin.z))
         {
             check2 = true;

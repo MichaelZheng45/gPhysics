@@ -68,38 +68,51 @@ public class ObjectBoundingBoxHull3D : CollisionHull3D
         //22. check if other_max.x > this_min.x and other_max.y > this_min.y 
 
         bool check1, check2;
-        Vector2 thisMax, thisMin, otherMax, otherMin;
-        Vector3 p1, p2, p3, p4;
-        /*
-        Vector3 otherPosition = other.getParticle().position;
-        float thisLength = length * .5f;
-        float thisHeight = height * .5f;
-        float otherLength = other.length * .5f;
-        float otherHeight = other.height * .5f;
+        Vector3 thisMax, thisMin, otherMax, otherMin;
+		Vector3 p1, p2, p3, p4, p5, p6, p7, p8;
 
-		
-        //get all corner points and then rotate it
-        p1 = rotatePoint(new Vector2(thisLength, thisHeight), rotation) + particle.position;
-        p2 = rotatePoint(new Vector2(thisLength, -thisHeight), rotation) + particle.position;
-        p3 = rotatePoint(new Vector2(-thisLength, -thisHeight), rotation) + particle.position;
-        p4 = rotatePoint(new Vector2(-thisLength, thisHeight), rotation) + particle.position;
+		Vector3 thisPos = particle.position;
+		Vector3 otherPosition = other.getParticle().position;
+		float thisLength = particle.size.x * .5f;
+		float thisHeight = particle.size.y * .5f;
+		float thisWidth = particle.size.z * .5f;
+		float otherLength = other.getParticle().size.x * .5f;
+		float otherHeight = other.getParticle().size.y * .5f;
+		float otherWidth = other.getParticle().size.z * .5f;
 
-        //for each corner, move it relative to the box then transform by the world matrix inverse. Finally add position back
-        p1 = other.transform.localToWorldMatrix.inverse * (p1 - otherPosition);
-        p2 = other.transform.localToWorldMatrix.inverse * (p2 - otherPosition);
-        p3 = other.transform.localToWorldMatrix.inverse * (p3 - otherPosition);
-        p4 = other.transform.localToWorldMatrix.inverse * (p4 - otherPosition);
+		p1 = particle.getTransformMatrix() * (thisPos + new Vector3(thisLength, thisHeight, thisWidth));
+		p2 = particle.getTransformMatrix() * (thisPos + new Vector3(thisLength, thisHeight, -thisWidth));
+		p3 = particle.getTransformMatrix() * (thisPos + new Vector3(thisLength, -thisHeight, thisWidth));
+		p4 = particle.getTransformMatrix() * (thisPos + new Vector3(thisLength, -thisHeight, -thisWidth));
+		p5 = particle.getTransformMatrix() * (thisPos + new Vector3(-thisLength, thisHeight, thisWidth));
+		p6 = particle.getTransformMatrix() * (thisPos + new Vector3(-thisLength, thisHeight, -thisWidth));
+		p8 = particle.getTransformMatrix() * (thisPos + new Vector3(-thisLength, -thisHeight, -thisWidth));
+		p7 = particle.getTransformMatrix() * (thisPos + new Vector3(-thisLength, -thisHeight, thisWidth));
 
-        p1 += otherPosition;
-        p2 += otherPosition;
-        p3 += otherPosition;
-        p4 += otherPosition;
 
-        thisMax = new Vector2(Mathf.Max(p1.x, p2.x, p3.x, p4.x), Mathf.Max(p1.y, p2.y, p3.y, p4.y));
-        thisMin = new Vector2(Mathf.Min(p1.x, p2.x, p3.x, p4.x), Mathf.Min(p1.y, p2.y, p3.y, p4.y));
+		p1 = other.getParticle().getTransformMatrixInv() * ( p1 - otherPosition);
+		p2 = other.getParticle().getTransformMatrixInv() * ( p2 - otherPosition);
+		p3 = other.getParticle().getTransformMatrixInv() * ( p3 - otherPosition);
+		p4 = other.getParticle().getTransformMatrixInv() * ( p4 - otherPosition);
+		p5 = other.getParticle().getTransformMatrixInv() * ( p5 - otherPosition);
+		p6 = other.getParticle().getTransformMatrixInv() * ( p6 - otherPosition);
+		p7 = other.getParticle().getTransformMatrixInv() * ( p7 - otherPosition);
+		p8 = other.getParticle().getTransformMatrixInv() * ( p8 - otherPosition);
 
-        otherMax = new Vector2(otherPosition.x + otherLength, otherPosition.y + otherHeight);
-        otherMin = new Vector2(otherPosition.x - otherLength, otherPosition.y - otherHeight);
+		p1 += otherPosition;
+		p2 += otherPosition;
+		p3 += otherPosition;
+		p4 += otherPosition;
+		p5 += otherPosition;
+		p6 += otherPosition;
+		p7 += otherPosition;
+		p8 += otherPosition;
+
+		thisMax = new Vector3(Mathf.Max(p1.x, p2.x, p3.x, p4.x, p5.x, p6.x, p7.x, p8.x), Mathf.Max(p1.y, p2.y, p3.y, p4.y, p5.y, p6.y, p7.y, p8.y), Mathf.Max(p1.z, p2.z, p3.z, p4.z, p5.z, p6.z, p7.z, p8.z));
+		thisMin = new Vector3(Mathf.Min(p1.x, p2.x, p3.x, p4.x, p5.x, p6.x, p7.x, p8.x), Mathf.Min(p1.y, p2.y, p3.y, p4.y, p5.y, p6.y, p7.y, p8.y), Mathf.Min(p1.z, p2.z, p3.z, p4.z, p5.z, p6.z, p7.z, p8.z));
+
+		otherMax = otherPosition + new Vector3(otherLength, otherHeight, otherWidth);
+		otherMin = otherPosition + new Vector3(-otherLength, -otherHeight, -otherWidth);
 
         if ((thisMax.x >= otherMin.x && thisMax.y >= otherMin.y) && (otherMax.x >= thisMin.x && otherMax.y >= thisMin.y))
         {
@@ -110,30 +123,41 @@ public class ObjectBoundingBoxHull3D : CollisionHull3D
             check1 = false;
         }
 
-        //get all corner points and then rotate it
-        p1 = rotatePoint(new Vector2(otherLength, otherHeight), rotation) + otherPosition;
-        p2 = rotatePoint(new Vector2(otherLength, -otherHeight), rotation) + otherPosition;
-        p3 = rotatePoint(new Vector2(-otherLength, -otherHeight), rotation) + otherPosition;
-        p4 = rotatePoint(new Vector2(-otherLength, otherHeight), rotation) + otherPosition;
+		p1 = other.getParticle().getTransformMatrix() * (otherPosition + new Vector3(otherLength, otherHeight, otherWidth));
+		p2 = other.getParticle().getTransformMatrix() * (otherPosition + new Vector3(otherLength, otherHeight, -otherWidth));	
+		p3 = other.getParticle().getTransformMatrix() * (otherPosition + new Vector3(otherLength, -otherHeight, otherWidth));
+		p4 = other.getParticle().getTransformMatrix() * (otherPosition + new Vector3(otherLength, -otherHeight, -otherWidth));
+		p5 = other.getParticle().getTransformMatrix() * (otherPosition + new Vector3(-otherLength, otherHeight, otherWidth));
+		p6 = other.getParticle().getTransformMatrix() * (otherPosition + new Vector3(-otherLength, otherHeight, -otherWidth));
+		p7 = other.getParticle().getTransformMatrix() * (otherPosition + new Vector3(-otherLength, -otherHeight, otherWidth));
+		p8 = other.getParticle().getTransformMatrix() * (otherPosition + new Vector3(-otherLength, -otherHeight, -otherWidth));
 
-        //for each corner, move it relative to the box then transform by the world matrix inverse. Finally add position back
-        p1 = transform.localToWorldMatrix.inverse * (p1 - particle.position);
-        p2 = transform.localToWorldMatrix.inverse * (p2 - particle.position);
-        p3 = transform.localToWorldMatrix.inverse * (p3 - particle.position);
-        p4 = transform.localToWorldMatrix.inverse * (p4 - particle.position);
+		p1 = particle.getTransformMatrixInv() * (p1 - thisPos);
+		p2 = particle.getTransformMatrixInv() * (p2 - thisPos);
+		p3 = particle.getTransformMatrixInv() * (p3 - thisPos);
+		p4 = particle.getTransformMatrixInv() * (p4 - thisPos);
+		p5 = particle.getTransformMatrixInv() * (p5 - thisPos);
+		p6 = particle.getTransformMatrixInv() * (p6 - thisPos);
+		p7 = particle.getTransformMatrixInv() * (p7 - thisPos);
+		p8 = particle.getTransformMatrixInv() * (p8 - thisPos);
 
-        p1 += particle.position;
-        p2 += particle.position;
-        p3 += particle.position;
-        p4 += particle.position;
 
-        otherMax = new Vector2(Mathf.Max(p1.x, p2.x, p3.x, p4.x), Mathf.Max(p1.y, p2.y, p3.y, p4.y));
-        otherMin = new Vector2(Mathf.Min(p1.x, p2.x, p3.x, p4.x), Mathf.Min(p1.y, p2.y, p3.y, p4.y));
+		p1 += thisPos;
+		p2 += thisPos;
+		p3 += thisPos;
+		p4 += thisPos;
+		p5 += thisPos;
+		p6 += thisPos;
+		p7 += thisPos;
+		p8 += thisPos;
 
-        thisMax = new Vector2(particle.position.x + thisLength, particle.position.y + thisHeight);
-        thisMin = new Vector2(particle.position.x - thisLength, particle.position.y - thisHeight);
+		thisMax = new Vector3(Mathf.Max(p1.x, p2.x, p3.x, p4.x, p5.x, p6.x, p7.x, p8.x), Mathf.Max(p1.y, p2.y, p3.y, p4.y, p5.y, p6.y, p7.y, p8.y), Mathf.Max(p1.z, p2.z, p3.z, p4.z, p5.z, p6.z, p7.z, p8.z));
+		thisMin = new Vector3(Mathf.Min(p1.x, p2.x, p3.x, p4.x, p5.x, p6.x, p7.x, p8.x), Mathf.Min(p1.y, p2.y, p3.y, p4.y, p5.y, p6.y, p7.y, p8.y), Mathf.Min(p1.z, p2.z, p3.z, p4.z, p5.z, p6.z, p7.z, p8.z));
 
-        if ((thisMax.x >= otherMin.x && thisMax.y >= otherMin.y) && (otherMax.x >= thisMin.x && otherMax.y >= thisMin.y))
+		otherMax = otherPosition + new Vector3(otherLength, otherHeight, otherWidth);
+		otherMin = otherPosition + new Vector3(-otherLength, -otherHeight, -otherWidth);
+
+		if ((thisMax.x >= otherMin.x && thisMax.y >= otherMin.y) && (otherMax.x >= thisMin.x && otherMax.y >= thisMin.y))
         {
             check2 = true;
         }
@@ -145,7 +169,7 @@ public class ObjectBoundingBoxHull3D : CollisionHull3D
         {
             return true;
         }
-		*/
+		
         return false;
 
     }

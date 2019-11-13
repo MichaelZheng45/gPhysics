@@ -150,7 +150,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 346282358}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c0a61b6745d2f34cbd012a0be6ba4fe, type: 3}
+  m_Script: {fileID: 11500000, guid: f9e93f1244c2a49418289cf8bb57d2e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &346282360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 346282358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbee0c6c1b7fd0345a300d5ae4557820, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   position: {x: 0, y: 0, z: 0}
@@ -161,23 +173,11 @@ MonoBehaviour:
   rotationMode: 0
   positionMode: 1
   i_mode: 2
-  elasticity: 0.45
+  elasticity: 0
   startingMass: 1
   centerOfMassLocal: {x: 0, y: 0, z: 0}
   torque: {x: 0, y: 0, z: 0}
   size: {x: 1, y: 1, z: 1}
---- !u!114 &346282360
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 346282358}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59294fb51ea7b6643ad49008fe36ffcc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &346282361
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -306,6 +306,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
@@ -635,6 +637,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
@@ -826,6 +830,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+    m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &1282331503
 GameObject:
   m_ObjectHideFlags: 0
@@ -898,6 +904,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 30
@@ -994,6 +1002,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 0
   m_PreserveAspect: 0
@@ -1059,8 +1069,8 @@ GameObject:
   - component: {fileID: 1638442667}
   - component: {fileID: 1638442666}
   - component: {fileID: 1638442665}
-  - component: {fileID: 1638442664}
   - component: {fileID: 1638442668}
+  - component: {fileID: 1638442664}
   - component: {fileID: 1638442663}
   m_Layer: 0
   m_Name: Cube
@@ -1078,22 +1088,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1638442662}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c0a61b6745d2f34cbd012a0be6ba4fe, type: 3}
+  m_Script: {fileID: 11500000, guid: f9e93f1244c2a49418289cf8bb57d2e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: {x: 0, y: 0, z: 0}
-  posVelocity: {x: 0, y: 0, z: 0}
-  posAcceleration: {x: 0, y: 0, z: 0}
-  rotVelocity: {x: 0, y: 0, z: 0}
-  rotAcceleration: {x: 0, y: 0, z: 0}
-  rotationMode: 0
-  positionMode: 1
-  i_mode: 2
-  elasticity: 0
-  startingMass: 1
-  centerOfMassLocal: {x: 0, y: 0, z: 0}
-  torque: {x: 0, y: 0, z: 0}
-  size: {x: 1, y: 1, z: 1}
 --- !u!65 &1638442664
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1176,14 +1173,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 1638442662}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67cc9207f16924a418008fbce3c7dce2, type: 3}
+  m_Script: {fileID: 11500000, guid: bbee0c6c1b7fd0345a300d5ae4557820, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  length: 0
-  height: 0
-  width: 0
-  check1: 0
-  check2: 0
+  position: {x: 0, y: 0, z: 0}
+  posVelocity: {x: 0, y: 0, z: 0}
+  posAcceleration: {x: 0, y: 0, z: 0}
+  rotVelocity: {x: 0, y: 0, z: 0}
+  rotAcceleration: {x: 0, y: 0, z: 0}
+  rotationMode: 0
+  positionMode: 1
+  i_mode: 2
+  elasticity: 0
+  startingMass: 1
+  centerOfMassLocal: {x: 0, y: 0, z: 0}
+  torque: {x: 0, y: 0, z: 0}
+  size: {x: 1, y: 1, z: 1}
 --- !u!1 &2029392915
 GameObject:
   m_ObjectHideFlags: 0
@@ -1224,11 +1229,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2029392915}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa33248e2c34d3d49a1fde3ad564fc0b, type: 3}
+  m_Script: {fileID: 11500000, guid: 26d122d343e951d47a2c39807e4e70ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   allCollisionObj:
-  - {fileID: 1638442668}
-  - {fileID: 346282360}
+  - {fileID: 1638442663}
+  - {fileID: 346282359}
   red: {fileID: 2100000, guid: c75fdb712a8b4694eb48d74451728363, type: 2}
   Green: {fileID: 2100000, guid: 542b11da99e23ed4aa9b2b9b316766ff, type: 2}
