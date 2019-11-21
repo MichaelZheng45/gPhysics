@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 using System.Runtime.InteropServices;
 
-public class MyUnityPLugin
+public class CircleCollisionChecker
 {
     [DllImport("MyUnityPlugin")]
     public static extern int InitFoo(int f_new = 0);
@@ -14,4 +14,6 @@ public class MyUnityPLugin
 
     [DllImport("MyUnityPlugin")]
     public static extern int TermFoo();
+
+    
 }

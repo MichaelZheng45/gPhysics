@@ -1,0 +1,6 @@
+﻿  pch.cpp
+  dllmain.cpp
+  foo.cpp
+  myunityplugin.cpp
+  Generating Code...
+  myUnityPlugin.vcxproj -> C:\Users\michael.zheng\Desktop\myUnityPlugin\Debug\myUnityPlugin.dll

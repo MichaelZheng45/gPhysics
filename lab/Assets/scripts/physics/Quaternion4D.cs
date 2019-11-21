@@ -124,6 +124,4 @@ public class Quaternion4D
         result.z = (num8 - num11) * b.x + (num9 + num10) * b.y + (1f - (num4 + num5)) * b.z;
         return result;
     }
-
-  
 }

@@ -1,0 +1,7 @@
+﻿  pch.cpp
+  dllmain.cpp
+  foo.cpp
+  myunityplugin.cpp
+  Generating Code...
+     Creating library C:\Users\michael.zheng\Desktop\myUnityPlugin\x64\Debug\myUnityPlugin.lib and object C:\Users\michael.zheng\Desktop\myUnityPlugin\x64\Debug\myUnityPlugin.exp
+  myUnityPlugin.vcxproj -> C:\Users\michael.zheng\Desktop\myUnityPlugin\x64\Debug\myUnityPlugin.dll
