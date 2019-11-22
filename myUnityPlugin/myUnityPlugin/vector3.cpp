@@ -34,3 +34,13 @@ Vector3D Vector3D::operator*(float scalar)
 	y *= scalar;
 	z *= scalar;
 }
+
+float Vector3D::Dot(Vector3D a, Vector3D b)
+{
+	return ((a.x * b.x) + (a.y * b.y) + (a.z * b.z));
+}
+
+Vector3D Vector3D::Project(Vector3D a, Vector3D b)
+{
+
+}
