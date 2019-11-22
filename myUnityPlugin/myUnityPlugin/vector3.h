@@ -20,6 +20,7 @@ class Vector3D
 	void setY(float num) { y = num; }
 	void setZ(float num) { z = num; }
 
+<<<<<<< HEAD
 	static float Dot(Vector3D a, Vector3D b);
 	static Vector3D Project(Vector3D a, Vector3D b);
 
@@ -27,6 +28,12 @@ class Vector3D
 	Vector3D operator-(Vector3D* vec);
 	Vector3D operator*(Vector3D* vec);
 	Vector3D operator*(float scalar);
+=======
+	Vector3D operator+(const Vector3D vec);
+	Vector3D operator-(const Vector3D vec);
+	Vector3D operator*=(const Vector3D vec);
+	Vector3D* operator*(float scalar);
+>>>>>>> e152ba8accfaddf29cbca5130ee21e019455e4d6
 };
 
 
