@@ -12,6 +12,7 @@ class Vector3D
 	public:
 	Vector3D(float newX, float newY, float newZ) :x(newX), y(newY), z(newZ) {}
 	Vector3D(Vector3D* data);
+	Vector3D();
 
 	float getX() { return x; }
 	float getY() { return y; }
@@ -20,11 +21,16 @@ class Vector3D
 	void setY(float num) { y = num; }
 	void setZ(float num) { z = num; }
 
+	//Utility Functions
+	float Magnitude();
+	Vector3D Normalized();
 	static float Dot(Vector3D a, Vector3D b);
 	static Vector3D Project(Vector3D a, Vector3D b);
+	static Vector3D Cross(Vector3D a, Vector3D b);
 
 	Vector3D operator+(const Vector3D vec);
 	Vector3D operator-(const Vector3D vec);
+	Vector3D operator/(const float scalar);
 	Vector3D operator*=(const Vector3D vec);
 	Vector3D* operator*(float scalar);
 	Vector3D operator- ();
