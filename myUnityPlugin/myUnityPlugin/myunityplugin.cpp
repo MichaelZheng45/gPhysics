@@ -1,14 +1,14 @@
 #include "myunityplugin.h"
 
-#include "circleCheck.h"
+#include "forceGenerator.h"
 
-CircleCollisionCheck* inst = 0;
+ForceGenerator* inst = 0;
 
 int InitFoo(int f_new)
 {
 	if (!inst)
 	{
-		inst = new CircleCollisionCheck(f_new);
+		inst = new ForceGenerator();
 		return 1;
 	}
 	return 0;
@@ -22,6 +22,44 @@ int DoFoo(int bar)
 		return 0;
 	}
 	return 0;
+}
+
+string generate_Gravity()
+{
+
+}
+
+string generate_Normal()
+{
+
+}
+
+string generate_Sliding()
+{
+
+}
+
+string generate_Friction_Static()
+{
+
+}
+
+string generate_Frictioin_Kinetic()
+{
+
+}
+
+string generate_Drag()
+{
+
+}
+string generate_Spring()
+{
+
+}
+string generate_Torque()
+{
+
 }
 
 int TermFoo()

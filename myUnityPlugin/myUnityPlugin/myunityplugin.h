@@ -3,8 +3,9 @@
 #define MYUNITYPLUGIN_H
 
 #include "lib.h"
+#include <string>
 
-
+using namespace std;
 
 #ifdef __cplusplus
 extern "C"
@@ -18,6 +19,14 @@ extern "C"
 
 MYUNITYPLUGIN_SYMBOL int InitFoo(int f_new);
 MYUNITYPLUGIN_SYMBOL int DoFoo(int bar);
+MYUNITYPLUGIN_SYMBOL string generate_Gravity();
+MYUNITYPLUGIN_SYMBOL string generate_Normal();
+MYUNITYPLUGIN_SYMBOL string generate_Sliding();
+MYUNITYPLUGIN_SYMBOL string generate_Friction_Static();
+MYUNITYPLUGIN_SYMBOL string generate_Frictioin_Kinetic();
+MYUNITYPLUGIN_SYMBOL string generate_Drag();
+MYUNITYPLUGIN_SYMBOL string generate_Spring();
+MYUNITYPLUGIN_SYMBOL string generate_Torque();
 MYUNITYPLUGIN_SYMBOL int TermFoo();
 
 
