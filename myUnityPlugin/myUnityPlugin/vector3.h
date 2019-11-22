@@ -20,10 +20,10 @@ class Vector3D
 	void setY(float num) { y = num; }
 	void setZ(float num) { z = num; }
 
-	Vector3D operator+(Vector3D* vec);
-	Vector3D operator-(Vector3D* vec);
-	Vector3D operator*(Vector3D* vec);
-	Vector3D operator*(float scalar);
+	Vector3D operator+(const Vector3D vec);
+	Vector3D operator-(const Vector3D vec);
+	Vector3D operator*=(const Vector3D vec);
+	Vector3D* operator*(float scalar);
 };
 
 
