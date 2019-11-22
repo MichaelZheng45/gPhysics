@@ -35,6 +35,13 @@ Vector3D* Vector3D::operator*(float scalar)
 	z *= scalar;
 }
 
+Vector3D Vector3D::operator-()
+{
+	x = -x;
+	y = -y;
+	z = -z;
+}
+
 float Vector3D::Dot(Vector3D a, Vector3D b)
 {
 	return ((a.x * b.x) + (a.y * b.y) + (a.z * b.z));
@@ -42,5 +49,5 @@ float Vector3D::Dot(Vector3D a, Vector3D b)
 
 Vector3D Vector3D::Project(Vector3D a, Vector3D b)
 {
-
+	return b * Dot(a, b);
 }

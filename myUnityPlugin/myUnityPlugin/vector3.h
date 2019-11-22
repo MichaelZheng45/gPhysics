@@ -27,6 +27,7 @@ class Vector3D
 	Vector3D operator-(const Vector3D vec);
 	Vector3D operator*=(const Vector3D vec);
 	Vector3D* operator*(float scalar);
+	Vector3D operator- ();
 
 };
 
