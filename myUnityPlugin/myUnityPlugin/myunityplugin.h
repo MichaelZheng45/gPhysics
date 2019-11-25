@@ -19,8 +19,8 @@ extern "C"
 
 MYUNITYPLUGIN_SYMBOL int InitFoo(int f_new);
 MYUNITYPLUGIN_SYMBOL int DoFoo(int bar);
-MYUNITYPLUGIN_SYMBOL string generate_Gravity();
-MYUNITYPLUGIN_SYMBOL string generate_Normal();
+MYUNITYPLUGIN_SYMBOL string generate_Gravity(float particleMass, float gravityCoefficient, float worldUp[]);
+MYUNITYPLUGIN_SYMBOL string generate_Normal(float force_Gravity[], float surfaceNormal_unit[]);
 MYUNITYPLUGIN_SYMBOL string generate_Sliding();
 MYUNITYPLUGIN_SYMBOL string generate_Friction_Static();
 MYUNITYPLUGIN_SYMBOL string generate_Frictioin_Kinetic();
