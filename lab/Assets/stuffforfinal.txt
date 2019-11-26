@@ -1,0 +1,25 @@
+//option for to change the collider hull -> by generating new prefab and have the old particle3d data be transferred over delete old one. update position
+//rotation mode and position mode option
+//choose the inertia mode and update inertia
+//update starting mass
+//choose starting position and change it in the actual transform componenet
+//choose starting rotation and change it in the actual transform component
+//choose size
+
+//forceoptions
+you can have an add force at start-> for both rotation and position
+//what force to be activated
+
+// creating new particle -> choose hull first
+//need to automatically add it to the collision manager
+
+
+
+
+//seperate window
+i like my particles and i want to load it into a different project
+-save the scene particle data- 
+reload all data
+
+-writer-
+-reader-

@@ -156,7 +156,6 @@ public class particle3D : MonoBehaviour
                 break;
         }
         setInertia(newInertia);
-
     }
 
     // Update is called once per frame
