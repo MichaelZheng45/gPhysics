@@ -5,19 +5,19 @@ using UnityEngine.UI;
 
 public enum rotationUpdate
 {
-    ROTATION_EULER_EXPLICIT,
-    ROTATION_KINEMATIC
+    ROTATION_EULER_EXPLICIT = 0,
+    ROTATION_KINEMATIC = 1
 }
 
 public enum positionUpdate
 {
-    POSITION_EULER_EXPLICIT,
-    POSITION_KINEMATIC,
+    POSITION_EULER_EXPLICIT = 0,
+    POSITION_KINEMATIC = 1
 }
 
 public enum particleType
 {
-    ASTEROID,
+    ASTEROID = 0,
     SHIP,
     BULLET
 }
@@ -85,6 +85,34 @@ public class particle2D : MonoBehaviour
     public float getInverseMass()
     {
         return 1f / mass;
+    }
+
+    public int getPositionType()
+    {
+        return (int)positionMode;
+    }
+
+    public int getRotationType()
+    {
+        return (int)rotationMode;
+    }
+
+    public int getInertiaType()
+    {
+        return (int)i_mode;
+    }
+
+    public int getCollisionHullType()
+    {
+        CollisionHull2D hull;
+        if (hull = GetComponent<CollisionHull2D>())
+        {
+            return hull.getHullInt();
+        }
+        else
+        {
+            return -1;
+        }
     }
 
     //force application lab 2 step 2

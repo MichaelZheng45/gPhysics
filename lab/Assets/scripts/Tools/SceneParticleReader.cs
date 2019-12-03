@@ -1,18 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
-public class SceneParticleReader : MonoBehaviour
+public class SceneParticleReader
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    StreamReader sr;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 }

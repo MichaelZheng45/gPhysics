@@ -119,6 +119,11 @@ public abstract class CollisionHull3D : MonoBehaviour
         return type;
     }
 
+    public int getHullInt()
+    {
+        return (int)type;
+    }
+
     protected particle3D particle { get; set; }
     public particle3D getParticle()
     {
