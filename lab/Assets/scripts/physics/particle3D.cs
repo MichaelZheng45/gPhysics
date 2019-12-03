@@ -11,11 +11,11 @@ public class particle3D : MonoBehaviour
     Matrix4x4 worldTransformMatrix, worldTransformMatrixInv;
 
     [SerializeField]
-    rotationUpdate rotationMode = rotationUpdate.ROTATION_KINEMATIC;
+    public rotationUpdate rotationMode = rotationUpdate.ROTATION_KINEMATIC;
     [SerializeField]
-    positionUpdate positionMode = positionUpdate.POSITION_KINEMATIC;
+    public positionUpdate positionMode = positionUpdate.POSITION_KINEMATIC;
     [SerializeField]
-    InertiaTypes3D i_mode = InertiaTypes3D.BOX;
+    public InertiaTypes3D i_mode = InertiaTypes3D.BOX;
 
     [Range(0f, 1f)]
     public float elasticity;
@@ -126,28 +126,24 @@ public class particle3D : MonoBehaviour
 
     void updateRotationKinematic(float dt)
     {
+        rotationMode = rotationUpdate.ROTATION_EULER_EXPLICIT;
         //rotation += rotVelocity * dt + (1 / 2) * rotAcceleration * (dt * dt);
         rotVelocity += (rotAcceleration * dt);
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void updateInertia()
     {
-        Quaternion rot = transform.rotation;
-        rotation = new Quaternion4D(rot.w,rot.x,rot.y,rot.z);
-        setMass(startingMass);
-
         Matrix4x4 newInertia = Matrix4x4.identity;
         switch (i_mode)
         {
             case InertiaTypes3D.SPHERE:
-                newInertia = InertiaGenerator3D.GenerateInertia_Sphere(mass,size.x);
+                newInertia = InertiaGenerator3D.GenerateInertia_Sphere(mass, size.x);
                 break;
             case InertiaTypes3D.HALLOW_SPHERE:
                 newInertia = InertiaGenerator3D.GenerateInertia_Hallow_Sphere(mass, size.x);
                 break;
             case InertiaTypes3D.BOX:
-                newInertia = InertiaGenerator3D.GenerateInertia_Box(mass, size.x,size.y,size.z);
+                newInertia = InertiaGenerator3D.GenerateInertia_Box(mass, size.x, size.y, size.z);
                 break;
             case InertiaTypes3D.HALLOW_BOX:
                 newInertia = InertiaGenerator3D.GenerateInertia_Hallow_Box(mass, size.x, size.y, size.z);
@@ -156,6 +152,14 @@ public class particle3D : MonoBehaviour
                 break;
         }
         setInertia(newInertia);
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        Quaternion rot = transform.rotation;
+        rotation = new Quaternion4D(rot.w,rot.x,rot.y,rot.z);
+        setMass(startingMass);
     }
 
     // Update is called once per frame

@@ -77,4 +77,9 @@ public class CollisionManager3D : MonoBehaviour
     {
         allCollisionObj.Remove(gameObj);
     }
+
+    public void removeOld(GameObject gameObj)
+    {
+        allCollisionObj.Remove(gameObj.GetComponent<CollisionHull3D>());
+    }
 }
