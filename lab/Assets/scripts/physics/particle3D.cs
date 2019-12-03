@@ -80,6 +80,34 @@ public class particle3D : MonoBehaviour
         return worldTransformMatrixInv;
     }
 
+    public int getPositionType()
+    {
+        return (int)positionMode;
+    }
+
+    public int getRotationType()
+    {
+        return (int)rotationMode;
+    }
+
+    public int getInertiaType()
+    {
+        return (int)i_mode;
+    }
+
+    public int getCollisionHullType()
+    {
+        CollisionHull3D hull;
+        if (hull = GetComponent<CollisionHull3D>())
+        {
+            return hull.getHullInt();
+        }
+        else
+        {
+            return -1;
+        }
+    }
+
     //force application lab 2 step 2
     public void AddForce(Vector3 newForce)
     {

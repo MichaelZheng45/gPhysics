@@ -7,7 +7,7 @@ public class CircleHull3D : CollisionHull3D
     public CircleHull3D() : base(CollisionHullType3D.hull_circle) { }
 
     [Range(0f, 100f)]
-    public float radius;
+    float radius;
 
     private void Update()
     {
@@ -25,7 +25,7 @@ public class CircleHull3D : CollisionHull3D
         //6. compare distance^2 <= sum^2
         Vector3 thisPos, otherPos;
         thisPos = particle.position;
-
+        radius = this.particle.size.x;
         otherPos = other.particle.position;
 
         Vector3 diff = otherPos - thisPos;
@@ -82,7 +82,7 @@ public class CircleHull3D : CollisionHull3D
         //7. take sum of radius and closest point distance
         //8. square sum total
         //9. compare distance^2 <= sum^2
-
+        radius = this.particle.size.x;
         Vector3 thisPos, otherPos;
         thisPos = particle.position;
         otherPos = other.getParticle().position;
@@ -134,7 +134,7 @@ public class CircleHull3D : CollisionHull3D
         //7. take sum of radius and closest point distance
         //8. square sum total
         //9. compare distance^2 <= sum^2
-
+        radius = this.particle.size.x;
         Vector3 otherPos;
         //move circle center into box's space by multiplying by its world transform inverse
         otherPos = other.getParticle().position;
