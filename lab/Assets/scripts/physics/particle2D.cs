@@ -6,13 +6,15 @@ using UnityEngine.UI;
 public enum rotationUpdate
 {
     ROTATION_EULER_EXPLICIT = 0,
-    ROTATION_KINEMATIC = 1
+    ROTATION_KINEMATIC = 1,
+    NUM_TYPES
 }
 
 public enum positionUpdate
 {
     POSITION_EULER_EXPLICIT = 0,
-    POSITION_KINEMATIC = 1
+    POSITION_KINEMATIC = 1,
+    NUM_TYPES
 }
 
 public enum particleType

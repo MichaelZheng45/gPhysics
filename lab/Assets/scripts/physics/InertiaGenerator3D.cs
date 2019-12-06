@@ -7,7 +7,8 @@ public enum InertiaTypes3D
     SPHERE,
     HALLOW_SPHERE,
     BOX,
-    HALLOW_BOX
+    HALLOW_BOX,
+    NUM_TYPES
 }
 
 public class InertiaGenerator3D

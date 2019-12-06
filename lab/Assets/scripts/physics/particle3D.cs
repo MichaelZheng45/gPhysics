@@ -112,14 +112,32 @@ public class particle3D : MonoBehaviour
         return (int)positionMode;
     }
 
+    public void setPositionType(int type)
+    {
+        Mathf.Clamp(type, 0, (int)positionUpdate.NUM_TYPES - 1);
+        positionMode = (positionUpdate)type;
+    }
+
     public int getRotationType()
     {
         return (int)rotationMode;
     }
 
+    public void setRotationType(int type)
+    {
+        Mathf.Clamp(type, 0, (int)rotationUpdate.NUM_TYPES - 1);
+        rotationMode = (rotationUpdate)type;
+    }
+
     public int getInertiaType()
     {
         return (int)i_mode;
+    }
+
+    public void setInertiaType(int type)
+    {
+        Mathf.Clamp(type, 0, (int)InertiaTypes3D.NUM_TYPES - 1);
+        i_mode = (InertiaTypes3D)type;
     }
 
     public int getCollisionHullType()
