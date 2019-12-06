@@ -115,7 +115,7 @@ MonoBehaviour:
   positionMode: 1
   i_mode: 2
   elasticity: 0
-  startingMass: 0
+  startingMass: 1
   centerOfMassLocal: {x: 0, y: 0, z: 0}
   torque: {x: 0, y: 0, z: 0}
   size: {x: 0, y: 0, z: 0}
@@ -131,4 +131,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 181cd0d5da278ab4cb3326c457c63fdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 0

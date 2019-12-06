@@ -6,7 +6,7 @@ public class ForceGenerate3D
 {
     public static Vector3 GenerateForce_Gravity(float particleMass, float gravityCoefficient, Vector3 worldUp)
     {
-        Vector3 f_gravity = particleMass * gravityCoefficient * worldUp;
+        Vector3 f_gravity = particleMass * gravityCoefficient * -worldUp;
         return f_gravity;
     }
 

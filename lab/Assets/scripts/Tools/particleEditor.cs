@@ -4,13 +4,19 @@ using UnityEngine;
 using UnityEditor;
 public class particleEditor : EditorWindow
 {
+    enum particleEditorMode
+    {
+        EDIT_PARTICLE,
+        CREATE_NEW,
+        CHANGE_HULL,
+        FORCEGENERATOR
+    }
+
     public GameObject particleObj;
     particle3D particleData;
     CollisionManager3D colManager3D;
 
-    bool createNewParticle = false;
-    bool switchParticleHull = false;
-    bool forceOptions = false;
+    particleEditorMode editorMode = 0;
     [MenuItem("Window/ParticleEditor")]
     public static void ShowWindow()
     {
@@ -33,31 +39,96 @@ public class particleEditor : EditorWindow
         if(!particleObj)
         {
             GUILayout.Label("No Particle Game Object:");
-            createNewParticle = EditorGUILayout.Toggle("Create New Particle", createNewParticle);
+            GUILayout.Label("Create New Particle?");
 
-            if(createNewParticle)
+            if (chooseCreateParticle())
             {
-                if(chooseCreateParticle())
-                {
-                    //starting stuff
-                    particleData = particleObj.GetComponent<particle3D>();
-                    particleData.size = new Vector3(1, 1, 1);
-                    colManager3D.addNew(particleObj);
-                    createNewParticle = false;
-                }
+                //starting stuff
+                particleData = particleObj.GetComponent<particle3D>();
+                particleData.size = new Vector3(1, 1, 1);
+                colManager3D.addNew(particleObj);
             }
+            
         }
         else
         {
             particleData = particleObj.GetComponent<particle3D>();
             particleObj.name = EditorGUILayout.TextField("Name", particleObj.name);
             GUILayout.Label("Particle Options", EditorStyles.boldLabel);
-            particleModding();
+            editorMode = (particleEditorMode)EditorGUILayout.EnumPopup("EditorOptions", editorMode);
+            switch (editorMode)
+            {
+                case particleEditorMode.CREATE_NEW:
+                    if (chooseCreateParticle())
+                    {
+                        //starting stuff
+                        particleData = particleObj.GetComponent<particle3D>();
+                        particleData.size = new Vector3(1, 1, 1);
+                        colManager3D.addNew(particleObj);
+                        editorMode = particleEditorMode.EDIT_PARTICLE;
+                    }
+                    break;
+                case particleEditorMode.CHANGE_HULL:
+                    changeHull();
+                    break;
+                case particleEditorMode.FORCEGENERATOR:
+                    ForceStuff();
+                    break;
+                case particleEditorMode.EDIT_PARTICLE:
+                    particleModding();
+                    break;
+                default:
+                    break;
+            }
+
+        }
+    }
+
+    Transform target;
+    void ForceStuff()
+    {
+        GUILayout.Space(20);
+        particleData.initialForce = EditorGUILayout.Toggle("Initial Force", particleData.initialForce);
+        if(particleData.initialForce)
+        {
+            target = EditorGUILayout.ObjectField("TargetDirection", target, typeof(Transform), true) as Transform;
+            if(target)
+            {
+                Vector3 dir = (target.position - particleData.position).normalized;
+                particleData.initialDir = dir;
+                Debug.DrawLine(particleData.position, particleData.position + particleData.initialDir);
+                target = null;
+            }
+            GUILayout.Label(particleData.initialDir.ToString());
+            particleData.initialForceMagnitude = EditorGUILayout.FloatField("Force Magnitude", particleData.initialForceMagnitude);
+        }
+
+        GUILayout.Space(20);
+        particleData.gravityOn = EditorGUILayout.Toggle("Activate Gravity", particleData.gravityOn);
+        if (particleData.gravityOn)
+        {
+            particleData.gravityStrength = EditorGUILayout.FloatField("Gravity Magnitude", particleData.gravityStrength);
+        }
+    }
+
+    void changeHull()
+    {
+        GUILayout.Space(20);
+        GameObject curParticle = particleObj;
+        if(chooseCreateParticle())
+        {
+            particleObj.GetComponent<particle3D>().setBase(curParticle.GetComponent<particle3D>());
+            particleObj.name = curParticle.name;
+            DestroyImmediate(curParticle);
+            editorMode = particleEditorMode.EDIT_PARTICLE;
         }
     }
 
     void particleModding()
     {
+        GUILayout.Space(20);
+        GUILayout.Label("Edit Particle Data", EditorStyles.boldLabel);
+
         GUILayout.Label("ParticleModes");
         particleData.positionMode = (positionUpdate)EditorGUILayout.EnumPopup("PositionMode", particleData.positionMode);
         particleData.rotationMode = (rotationUpdate)EditorGUILayout.EnumPopup("RotationMode", particleData.rotationMode);
@@ -70,6 +141,9 @@ public class particleEditor : EditorWindow
         particleData.startingMass = EditorGUILayout.FloatField("Starting Mass", particleData.startingMass);
         particleData.setMass(particleData.startingMass);
 
+        particleData.elasticity = EditorGUILayout.Slider(particleData.elasticity, 0, 1);
+
+        GUILayout.Space(20);
         particleData.position = EditorGUILayout.Vector3Field("Starting Position", particleData.position);
         particleObj.transform.position = particleData.position;
 
@@ -77,7 +151,12 @@ public class particleEditor : EditorWindow
         particleData.size = EditorGUILayout.Vector3Field("Size/Scale", particleData.size);
         particleObj.transform.localScale = particleData.size;
 
-        if(GUILayout.Button("RemoveParticle"))
+        if (GUILayout.Button("CopyParticle"))
+        {
+            particleObj = Instantiate(particleObj) as GameObject;
+        }
+
+        if (GUILayout.Button("RemoveParticle"))
         {
             colManager3D.removeOld(particleObj);
             DestroyImmediate(particleObj);

@@ -5,41 +5,68 @@ using UnityEngine.UI;
 
 public class particle3D : MonoBehaviour
 {
-    public Vector3 position, posVelocity, posAcceleration;
-    public Vector3  rotVelocity, rotAcceleration;
-    Quaternion4D rotation;
-    Matrix4x4 worldTransformMatrix, worldTransformMatrixInv;
+    //ParticleMODES
+    //====================================================
 
-    [SerializeField]
+    [HideInInspector]
     public rotationUpdate rotationMode = rotationUpdate.ROTATION_KINEMATIC;
-    [SerializeField]
+    [HideInInspector]
     public positionUpdate positionMode = positionUpdate.POSITION_KINEMATIC;
-    [SerializeField]
+    [HideInInspector]
     public InertiaTypes3D i_mode = InertiaTypes3D.BOX;
 
-    [Range(0f, 1f)]
+
+    //PHYSICAL DATA
+    //====================================================
+    public Vector3 position, posVelocity, posAcceleration;
+    public Vector3  rotVelocity, rotAcceleration;
+
+    Quaternion4D rotation;
+
+    [HideInInspector]
+    public Vector3 size;
+    Matrix4x4 worldTransformMatrix, worldTransformMatrixInv;
+
+
+    [HideInInspector]
     public float elasticity;
 
     //lab 2 step 1
+    [HideInInspector]
     public float startingMass;
     float mass, massInv;
+
+    //Center of mass
+    [HideInInspector]
+    public Vector3 centerOfMassLocal = new Vector3(0, 0, 0);
+    Vector3 centerOfMassWorld;
 
     float coeff_static = .62f;
     float coeffc_kinetic = .48f;
 
+    //FORCE DATA
+    //====================================================
     //Position Force
     Vector3 force;
 
-    //Center of mass
-    public Vector3 centerOfMassLocal = new Vector3(0,0);
-    Vector3 centerOfMassWorld;
-
     //Rotational Force
     Matrix4x4 inertia, inertiaInv;
-    public Vector3 torque;
+    Vector3 torque;
 
-    [Tooltip("If you only need radius, do (radius, 0, 0)")]
-    public Vector3 size;
+    //starting force data
+    //====================================================
+    [HideInInspector]
+    public bool initialForce = false;
+    [HideInInspector]
+    public float initialForceMagnitude;
+    [HideInInspector]
+    public Vector3 initialDir;
+
+    [HideInInspector]
+    public bool gravityOn = false;
+    [HideInInspector]
+    public float gravityStrength = 0;
+
 
     public Matrix4x4 getInertia()
     {
@@ -187,7 +214,8 @@ public class particle3D : MonoBehaviour
     {
         Quaternion rot = transform.rotation;
         rotation = new Quaternion4D(rot.w,rot.x,rot.y,rot.z);
-        setMass(startingMass);
+
+        AddForce(initialDir * initialForceMagnitude);
     }
 
     // Update is called once per frame
@@ -221,31 +249,56 @@ public class particle3D : MonoBehaviour
         worldTransformMatrixInv = MatrixFunctions.getTransformInverseMatrix(rotation, position);
         centerOfMassWorld = centerOfMassLocal + position;
 
-        Vector3 torqueToAdd = Vector3.zero;
-        if(Input.GetKeyDown(KeyCode.UpArrow))
+        if(gravityOn)
         {
-            torqueToAdd = ForceGenerate3D.GenerateForce_Torque(Vector3.up * 2, position, Vector3.one);
+            AddForce(ForceGenerate3D.GenerateForce_Gravity(mass, gravityStrength, Vector3.up));
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            torqueToAdd = ForceGenerate3D.GenerateForce_Torque(Vector3.down * 2, position, Vector3.one);
-        }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            torqueToAdd = ForceGenerate3D.GenerateForce_Torque(Vector3.left * 2, position, Vector3.one);
-        }
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            torqueToAdd = ForceGenerate3D.GenerateForce_Torque(Vector3.right * 2, position, Vector3.one);
-        }
-		AddTorque(torqueToAdd);
+
         //accelerationUpdate
         updateAcceleration();
     }
 
-    public void setBase(Vector3 nPosition, Quaternion4D nRotation)
+    public void setBase(particle3D data)
     {
-        rotation = nRotation;
-        position = nPosition;
-    }
+        position = data.position;
+        posVelocity = data.posVelocity;
+        posAcceleration = data.posAcceleration;
+        rotVelocity = data.rotVelocity;
+        rotAcceleration = data.rotAcceleration;
+        rotation = data.rotation;
+        worldTransformMatrix = data.worldTransformMatrix;
+        worldTransformMatrixInv = data.worldTransformMatrixInv;
+
+        rotationMode = data.rotationMode;
+        positionMode = data.positionMode;
+        i_mode = data.i_mode;
+
+        elasticity = data.elasticity;
+
+        startingMass = data.startingMass;
+        mass = data.mass;
+        massInv = data.massInv;
+
+        coeff_static = data.coeff_static;
+        coeffc_kinetic = data.coeffc_kinetic;
+
+        force = data.force;
+
+        centerOfMassLocal = data.centerOfMassLocal;
+        centerOfMassWorld = data.centerOfMassWorld;
+
+        inertia = data.inertia;
+        inertiaInv = data.inertiaInv;
+        torque = data.torque;
+
+        size = data.size;
+
+        //forcegenstuf
+
+        initialForce = data.initialForce;
+        initialForceMagnitude = data.initialForceMagnitude;
+        initialDir = data.initialDir;
+        gravityOn = data.gravityOn;
+        gravityStrength = data.gravityStrength;
+}
 }

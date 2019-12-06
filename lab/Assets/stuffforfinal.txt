@@ -1,4 +1,4 @@
-//option for to change the collider hull -> by generating new prefab and have the old particle3d data be transferred over delete old one. update position
+//option for to change the collider hull -> by generating new prefab and have the old particle3d data be transferred over delete old one. update position (done)
 //rotation mode and position mode option (done)
 //choose the inertia mode and update inertia (done)
 //update starting mass (done)
@@ -7,8 +7,8 @@
 //choose size (done)
 
 //forceoptions
-you can have an add force at start-> for both rotation and position
-//what force to be activated
+you can have an add force at start-> for both rotation and position (done)
+//what force to be activated (done)
 
 // creating new particle -> choose hull first (done)
 //need to automatically add it to the collision manager (done)
