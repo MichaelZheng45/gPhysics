@@ -154,6 +154,7 @@ public class particleEditor : EditorWindow
         if (GUILayout.Button("CopyParticle"))
         {
             particleObj = Instantiate(particleObj) as GameObject;
+            colManager3D.addNew(particleObj);
         }
 
         if (GUILayout.Button("RemoveParticle"))
