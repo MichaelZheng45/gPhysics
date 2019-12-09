@@ -7,33 +7,37 @@ public class SceneParticleWriter
 {
     StreamWriter sw;
     const string filePath = "Assets/ParticleFileData/";
-    void writeFile3D(string fileName, List<particle3D> particles)
+    public void writeFile3D(string fileName, List<particle3D> particles)
     {
         string fullPath = filePath + fileName;
         sw = new StreamWriter(fullPath);
 
-        foreach(particle3D p in particles)
-        {
-            //Start of Particle Data
-            //Name
-            sw.WriteLine(p.name);
-            //Position
-            sw.WriteLine(p.position.x);        
-            sw.WriteLine(p.position.y);        
-            sw.WriteLine(p.position.z);        
-            sw.WriteLine(p.elasticity);
+		foreach (particle3D p in particles)
+		{
+			//Start of Particle Data
+			//Name
+			sw.WriteLine(p.name);
+			//Position
+			sw.WriteLine(p.position.x);
+			sw.WriteLine(p.position.y);
+			sw.WriteLine(p.position.z);
+			sw.WriteLine(p.elasticity);
 
-            sw.WriteLine(p.size.x);
-            sw.WriteLine(p.size.y);
-            sw.WriteLine(p.size.z);
+			sw.WriteLine(p.size.x);
+			sw.WriteLine(p.size.y);
+			sw.WriteLine(p.size.z);
 
-            sw.WriteLine(p.getMass());         
-            sw.WriteLine(p.getInertiaType());  
-            sw.WriteLine(p.getRotationType()); 
-            sw.WriteLine(p.getPositionType());
-            sw.WriteLine(p.getCollisionHullType());
-        }
-        sw.WriteLine("EoF");
+			sw.WriteLine(p.rotation.w);
+			sw.WriteLine(p.rotation.x);
+			sw.WriteLine(p.rotation.y);
+			sw.WriteLine(p.rotation.z);
+
+			sw.WriteLine(p.getMass());
+			sw.WriteLine(p.getInertiaType());
+			sw.WriteLine(p.getRotationType());
+			sw.WriteLine(p.getPositionType());
+			sw.WriteLine(p.getCollisionHullType());
+		}
         sw.Close();
     }
 

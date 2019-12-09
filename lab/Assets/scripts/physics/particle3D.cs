@@ -21,7 +21,9 @@ public class particle3D : MonoBehaviour
     public Vector3 position, posVelocity, posAcceleration;
     public Vector3  rotVelocity, rotAcceleration;
 
-    Quaternion4D rotation;
+	[HideInInspector]
+    public Quaternion4D rotation;
+	
 
     [HideInInspector]
     public Vector3 size;

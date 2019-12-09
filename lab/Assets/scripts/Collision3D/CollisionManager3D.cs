@@ -82,4 +82,14 @@ public class CollisionManager3D : MonoBehaviour
     {
         allCollisionObj.Remove(gameObj.GetComponent<CollisionHull3D>());
     }
+
+	public List<particle3D> getAllParticles()
+	{
+		List<particle3D> pList = new List<particle3D>();
+		foreach (CollisionHull3D obj in allCollisionObj)
+		{
+			pList.Add(obj.getParticle());
+		}
+		return pList;
+	}
 }

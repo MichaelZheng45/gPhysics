@@ -127,7 +127,7 @@ public abstract class CollisionHull3D : MonoBehaviour
     protected particle3D particle { get; set; }
     public particle3D getParticle()
     {
-        return particle;
+        return gameObject.GetComponent<particle3D>();
     }
 
     public void setParticle(particle3D newParticle)
